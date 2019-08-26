@@ -22,6 +22,7 @@
 }
 body {
     background-color: #c0c0c0;
+    zoom: 80%;
 }
 .change-to-red{
     color: darkred!important;
