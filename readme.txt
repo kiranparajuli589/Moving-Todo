@@ -14,6 +14,6 @@ python manage.py createsuperuser
 #localhost
 python manage.py runserver
 
-#create todo through link:
+#check database through link:
 http://127.0.0.1:8000/admin/todo/todo/
 
