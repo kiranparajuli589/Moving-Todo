@@ -38,7 +38,7 @@
 
       <!-- Navbar brand -->
         <a class="navbar-brand" href="#">TODO</a>
-        <button class="btn aqua-gradient" type="button" data-toggle="modal" data-target="#myModal" style="margin:0; padding: 15px 17px; border-radius: 26px;"><i class="fas fa-plus" style="font-size: larger"></i></button>
+        <button class="btn aqua-gradient" type="button" data-toggle="modal" data-target="#myModal" style="margin:0; padding: 15px 17px; border-radius: 26px;"><i class="fas fa-plus" style="font-size: larger" data-toggle="tooltip" title="Create New Todo"></i></button>
     </nav>
     <!--/.Navbar-->
 
@@ -99,10 +99,10 @@
 <!--                    <p class="{{forloop.counter}}" style="font-size:20px; margin:0; text-align:center">...</p>-->
 <!--                </button>-->
                 <div class="button-container{{forloop.counter}}" style="display: block; text-align: center; margin:-10px 0 0px 0; padding-bottom: 5px">
-                    <a class="top m-1"><i class="fas fa-chevron-circle-up" style="font-size: 18px"></i></a>
-                    <a class="up m-1"><i class="fas fa-caret-square-up" style="font-size: 18px"></i></a>
-                    <a class="down m-1"><i class="fas fa-caret-square-down" style="font-size: 18px"></i></a>
-                    <a class="bottom m-1"><i class="fas fa-chevron-circle-down" style="font-size: 18px"></i></a>
+                    <a class="top m-1" data-toggle="tooltip" title="To Top"><i class="fas fa-chevron-circle-up" style="font-size: 18px"></i></a>
+                    <a class="up m-1" data-toggle="tooltip" title="Move Up"><i class="fas fa-caret-square-up" style="font-size: 18px"></i></a>
+                    <a class="down m-1" data-toggle="tooltip" title="Move Down"><i class="fas fa-caret-square-down" style="font-size: 18px"></i></a>
+                    <a class="bottom m-1" data-toggle="tooltip" title="To Bottom"><i class="fas fa-chevron-circle-down" style="font-size: 18px"></i></a>
                 </div>
               </div>
             {% endfor %}
@@ -147,6 +147,10 @@
     <!-- Central Modal Small -->
 
     <script>
+            // Tooltips Initialization
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            });
 
             $(document).on('click', '#create', function (e) {
                 e.preventDefault();
