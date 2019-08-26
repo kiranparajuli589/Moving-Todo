@@ -20,7 +20,8 @@ def index(request):
     print(element_names_array)
     context = {
         'elements_name_array': mark_safe(json.dumps(list(element_names_array), cls=DjangoJSONEncoder)),
-        'todo_list': todo
+        'todo_list': todo,
+        'minimum': Todo.objects.count()+1
     }
     return render(request, 'todo/index.html', context)
 
@@ -132,3 +133,18 @@ def todo_shift(request):
                 'message': 'equal'
             }
             return JsonResponse(data)
+
+
+def todo_create(request):
+    if request.method == 'POST':
+        subject = request.POST.get('subject')
+        content = request.POST.get('content')
+        todo = Todo.objects.create(
+            position=Todo.objects.count()+1,
+            element_title=subject,
+            content=content
+        )
+        data = {
+            'position': todo.position
+        }
+        return JsonResponse(data)

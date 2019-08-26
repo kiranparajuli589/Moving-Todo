@@ -37,19 +37,19 @@
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark primary-color">
 
       <!-- Navbar brand -->
-      <a class="navbar-brand" href="#">TODO</a>
-
+        <a class="navbar-brand" href="#">TODO</a>
+        <button class="btn aqua-gradient" type="button" data-toggle="modal" data-target="#myModal" style="margin:0; padding: 15px 17px; border-radius: 26px;"><i class="fas fa-plus" style="font-size: larger"></i></button>
     </nav>
     <!--/.Navbar-->
 
-     <div class="container" style="margin-top: 60px">
+     <div class="container" style="margin-top: 70px">
          <form class="inline" style="text-align: center">
              {%csrf_token%}
              <input class="col-md-3 z-depth-1" id="search" type="text" aria-label="Search" placeholder="Search Todo" style="border: 1px solid #4599dd; border-radius: 6px; padding: 10px; margin-top: 15px">
              <button class="btn btn-primary" style="border-radius: 22px; padding: 16px" name="searchSubmit"><i class="fas fa-search" aria-hidden="true" style="font-size: large"></i></button>
          </form>
      </div>
-    <div class="container bounce" style="margin-top:35px;">
+    <div class="container bounce col-md-10" style="margin-top:30px;">
         {%csrf_token%}
         <button id="show-shifter" class="btn aqua-gradient" onclick="showShifter()">Move Your Todo</button>
     </div>
@@ -85,11 +85,11 @@
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="content">
-                                        <p>{{todo.content}}</p>
+                                        <p class="content-text">{{todo.content}}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-1">
-                                    <p>#{{todo.id}}</p>
+                                    <p class="content-pos">#{{todo.id}}</p>
                                 </div>
                             </div>
                         </div>
@@ -112,8 +112,71 @@
       </div>
     </div>
 
+    <!-- Central Modal Small -->
+    <div id="myModal" class="modal fade" id="centralModalSm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true">
+
+      <!-- Change class .modal-sm to change the size of the modal -->
+      <div class="modal-dialog modal-sm" role="document">
+
+
+        <div class="modal-content">
+          <div class="modal-header" style="background: #4285f4!important; color: white;">
+            <h4 class="modal-title w-100" id="myModalLabel">Create Todo</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+            <form method="POST">
+                {%csrf_token%}
+                <div class="modal-body">
+                <!-- Material input -->
+                <div class="md-form">
+    <!--                <input type="number" id="position" class="form-control" placeholder="Position" min="{{minimum}}" max="10000">-->
+                    <input type="text" id="subject" class="form-control" placeholder="Subject">
+                    <input type="text" id="content" class="form-control" placeholder="Content">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button id="create" type="submit" class="btn btn-primary btn-sm">Save changes</button>
+              </div>
+            </form>
+        </div>
+      </div>
+    </div>
+    <!-- Central Modal Small -->
 
     <script>
+
+            $(document).on('click', '#create', function (e) {
+                e.preventDefault();
+                let subject = $("#subject").val();
+                let content = $("#content").val();
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'create' %}',
+                    data: {
+                        'subject': subject,
+                        'content': content,
+                        'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]").val()
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        let ele = $("#1").clone();
+                        ele.appendTo('.todos');
+                        (ele.find('h3.content_title').text(subject));
+                        ele.find('.content-pos').text('#'+data.position);
+                        ele.find('.content-text').text(content);
+                        orderContainerId();
+                        toggleButton();
+                        scrollAndColor(data.position);
+
+
+                    }
+                })
+            })
+
+
             function showShifter() {
                 $("#shift-form").toggle(500);
             }
