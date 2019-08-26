@@ -321,7 +321,7 @@
                             $("#"+from).insertAfter("#"+to);
 
                         }
-                        scrollAndColor(to);
+                        scrollAndColor(from);
                         orderContainerId();
                         toggleButton()
                     }
@@ -344,8 +344,7 @@
             function scrollAndColor(id) {
                 $("body,html").animate(
                 {
-                    // scrollTop: $("#"+id).offset()
-                    scrollTop: $("#"+id).offset().top - 80
+                    scrollTop: $("#"+id).offset().top - 320
                 },
                 600); //speed//
                 $("#"+id).find(".content_title").addClass('change-to-red');

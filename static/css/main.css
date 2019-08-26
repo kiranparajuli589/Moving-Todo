@@ -25,6 +25,5 @@ body {
 }
 .change-to-red{
     color: darkred!important;
-    background-color: lightblue;
-    transition: color 2s ease;
+    transition: color 3s ease;
 }
