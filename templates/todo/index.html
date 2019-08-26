@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ToDo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.8/css/mdb.min.css" rel="stylesheet">
+
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.8/js/mdb.min.js"></script>
+
+    <link href="{% static 'css/main.css' %}" rel="stylesheet" />
+
+    <script src="{% static 'js/main.js' %}" type="text/javascript"></script>
+</head>
+<body>
+    <!--Navbar-->
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark primary-color">
+
+      <!-- Navbar brand -->
+      <a class="navbar-brand" href="#">TODO</a>
+
+    </nav>
+    <!--/.Navbar-->
+
+     <div class="container" style="margin-top: 60px">
+         <form class="inline" style="text-align: center">
+             {%csrf_token%}
+             <input class="col-md-3 z-depth-1" id="search" type="text" aria-label="Search" placeholder="Search Todo" style="border: 1px solid #4599dd; border-radius: 6px; padding: 10px; margin-top: 15px">
+             <button class="btn btn-primary" style="border-radius: 22px; padding: 16px" name="searchSubmit"><i class="fas fa-search" aria-hidden="true" style="font-size: large"></i></button>
+         </form>
+     </div>
+    <div class="container bounce" style="margin-top:35px;">
+        {%csrf_token%}
+        <button id="show-shifter" class="btn aqua-gradient" onclick="showShifter()">Move Your Todo</button>
+    </div>
+    <form style="text-align: center; display: none" class="inline" id="shift-form">
+            {%csrf_token%}
+            <span style="font-size: 18px; font-weight: 450">POSITION:</span>
+            <input type="number" id="from" placeholder="From" style="margin: 10px 0px 0 20px; width: 105px;border: 2px solid #33b5e58f;
+    border-radius: 5px;padding: 5px">
+            <span style="margin: 0 20px 0 20px; font-size: 18px; font-weight: 450"><i class="fas fa-hand-point-right"></i></span>
+            <input type="number" id="to" placeholder="To" style=" width: 105px; border: 2px solid #33b5e58f;
+    border-radius: 5px;padding: 5px">
+        <button type="submit" onclick="formSubmit(event)" class="btn btn-primary btn-rounded" id="submit" style="font-size: 20px; padding: 12px 32px">MOVE</button>
+
+        </form>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-2"></div>
+
+        <div class="col-lg todos" >
+
+
+
+
+          {% for todo in todo_list %}
+
+            <div id='{{forloop.counter}}' class="z-depth-1-half m-4 todo-box" style="background-color:#f6f6f6; margin-bottom: 10px">
+                <div style="padding-top: 2px">
+                    <div style="border-left: 3px solid #4285f4; padding-left: 30px; margin-left: 20px;">
+                            <div class="title">
+                                <h3 class="content_title" style="color:#4285f4; margin: 25px 0 7px 0">{{todo.element_title}}</h3>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <div class="content">
+                                        <p>{{todo.content}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <p>#{{todo.id}}</p>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <hr>
+<!--                <button class="hover-me {{forloop.counter}}">-->
+<!--                    <p class="{{forloop.counter}}" style="font-size:20px; margin:0; text-align:center">...</p>-->
+<!--                </button>-->
+                <div class="button-container{{forloop.counter}}" style="display: block; text-align: center; margin:-10px 0 0px 0; padding-bottom: 5px">
+                    <a class="top m-1"><i class="fas fa-chevron-circle-up" style="font-size: 18px"></i></a>
+                    <a class="up m-1"><i class="fas fa-caret-square-up" style="font-size: 18px"></i></a>
+                    <a class="down m-1"><i class="fas fa-caret-square-down" style="font-size: 18px"></i></a>
+                    <a class="bottom m-1"><i class="fas fa-chevron-circle-down" style="font-size: 18px"></i></a>
+                </div>
+              </div>
+            {% endfor %}
+        </div>
+
+        <div class="col-2"></div>
+      </div>
+    </div>
+
+
+    <script>
+            function showShifter() {
+                $("#shift-form").toggle(500);
+            }
+
+            var elementsNameArray = {{ elements_name_array }};
+            console.log(elementsNameArray);
+            $("#search").autocomplete({source: elementsNameArray});
+
+            function orderContainerId(){
+                let i=1;
+                $('.todos').children('.todo-box').each(function () {
+                    $(this).attr('id', i); // "this" is the current element in the loop
+                    i++;
+                });
+            }
+            orderContainerId();
+            function toggleButton(){
+                $(".todos").children().find(".top").show();
+                $(".todos").children().find(".up").show();
+                $(".todos").children().find(".down").show();
+                $(".todos").children().find(".bottom").show();
+                $(".todos").children().first().find(".top").hide();
+                $(".todos").children().first().find(".up").hide();
+                $(".todos").children().last().find(".down").hide();
+                $(".todos").children().last().find(".bottom").hide();
+            }
+            toggleButton();
+
+            //move to top
+            $(document).on('click', '.top', function (e) {
+                let id = $(this).parent().parent().attr('id');
+                console.log(id);
+                $(this).parent().parent().prependTo(".todos");
+                toggleButton();
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'top' %}',
+                    data: {
+                        'position': id,
+                        'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]").val()
+                    },
+                    dataType: 'json',
+                    success: function (e) {
+                        orderContainerId();
+                        scrollAndColor('1');
+
+
+                    }
+                });
+            });
+
+            //move to bottom
+            $(document).on('click', '.bottom', function (e) {
+                let id = $(this).parent().parent().attr('id');
+                $(this).parent().parent().appendTo(".todos");
+                toggleButton();
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'bottom' %}',
+                    data: {
+                        'position': id,
+                        'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]").val()
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        orderContainerId();
+                        toggleButton();
+                        scrollAndColor(data.total);
+                    }
+                });
+            });
+            //move up
+            $(document).on('click', '.up', function (e) {
+                let id = $(this).parent().parent().attr('id');
+                id = (id - 1).toString();
+                $(this).parent().parent().fadeOut(200);
+                $("#"+id).fadeOut("slow");
+                $(this).parent().parent().insertBefore("#"+id);
+                $("#"+id).fadeIn("slow");
+                $(this).parent().parent().show().fadeIn(200);
+                toggleButton();
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'up' %}',
+                    data: {
+                        'position': id,
+                        'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]").val()
+                    },
+                    dataType: 'json',
+                    success: function (e) {
+                        orderContainerId();
+                        toggleButton()
+                    }
+                });
+            });
+            //move down
+            $(document).on('click', '.down', function (e) {
+                let id = parseInt($(this).parent().parent().attr('id'));
+                id = id + 1;
+                $(this).parent().parent().fadeOut(200);
+                $("#"+id).fadeOut("slow");
+                $(this).parent().parent()
+                .insertAfter("#"+id);
+                $("#"+id).fadeIn("slow");
+                $(this).parent().parent().show().fadeIn(200);
+
+                toggleButton();
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'down' %}',
+                    data: {
+                        'position': id,
+                        'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]").val()
+                    },
+                    dataType: 'json',
+                    success: function (e) {
+                        orderContainerId();
+                        toggleButton()
+                    }
+                });
+            });
+
+            function formSubmit(e) {
+                e.preventDefault();
+                let from = parseInt($("#from").val());
+                let to = parseInt($("#to").val());
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'shifter' %}',
+                    data: {
+                        'from': from,
+                        'to': to,
+                        'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]").val()
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (from > to) {
+                            $("#"+from).insertBefore("#"+to);
+                        }
+                        else if (from < to) {
+
+                            $("#"+from).insertAfter("#"+to);
+
+                        }
+                        scrollAndColor(to);
+                        orderContainerId();
+                        toggleButton()
+                    }
+                });
+            }
+            $('#search').keypress(function (e) {
+                var key = e.which;
+                if(key == 13)  // the enter key code
+                {
+                    $('button[name = searchSubmit]').click();
+                }
+            });
+            $(document).on('click','button[name = searchSubmit]', function (e) {
+                e.preventDefault();
+                let text = $("#search").val();
+                console.log(text);
+                let id = $('.content_title:contains("'+text+'")').parent().parent().parent().parent().attr('id');
+                scrollAndColor(id);
+            });
+            function scrollAndColor(id) {
+                $("body,html").animate(
+                {
+                    // scrollTop: $("#"+id).offset()
+                    scrollTop: $("#"+id).offset().top - 80
+                },
+                600); //speed//
+                $("#"+id).find(".content_title").addClass('change-to-red');
+                setTimeout(function(){
+                    $("#"+id).find(".content_title").removeClass('change-to-red');
+                },1000);
+            }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</body>
+</html>
