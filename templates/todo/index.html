@@ -166,19 +166,31 @@
                     },
                     dataType: 'json',
                     success: function (data) {
-                        let ele = $("#1").clone();
-                        ele.appendTo('.todos');
-                        (ele.find('h3.content_title').text(subject));
-                        ele.find('.content-pos').text('#'+data.position);
-                        ele.find('.content-text').text(content);
-                        orderContainerId();
-                        toggleButton();
-                        scrollAndColor(data.position);
+
+
+                        if (data.message === 'nonunique') {
+                            $('<div class="text-danger">Todo with this Element title already exists.</div>')
+                            .insertAfter($("#subject"))
+                            .delay(2000)
+                            .fadeOut(function() {
+                                $(this).remove();
+                            });
+                        }
+                        else {
+                            let ele = $("#1").clone();
+                            ele.appendTo('.todos');
+                            (ele.find('h3.content_title').text(subject));
+                            ele.find('.content-pos').text('#'+data.position);
+                            ele.find('.content-text').text(content);
+                            orderContainerId();
+                            toggleButton();
+                            scrollAndColor(data.position);
+                        }
 
 
                     }
                 })
-            })
+            });
 
 
             function showShifter() {
@@ -351,10 +363,10 @@
                     scrollTop: $("#"+id).offset().top - 320
                 },
                 600); //speed//
-                $("#"+id).find(".content_title").addClass('change-to-red');
+                $("#"+id).find(".content_title").addClass('glow');
                 setTimeout(function(){
-                    $("#"+id).find(".content_title").removeClass('change-to-red');
-                },1000);
+                    $("#"+id).find(".content_title").removeClass('glow');
+                },2000);
             }
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>

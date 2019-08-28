@@ -1,14 +1,9 @@
-import decimal
 import json
-
 from django.core.serializers.json import DjangoJSONEncoder
-from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render, render_to_response
-
-# Create your views here.
-from django.template.loader import render_to_string
+from django.db.utils import IntegrityError
+from django.http import JsonResponse
+from django.shortcuts import render
 from django.utils.safestring import mark_safe
-
 from .models import Todo
 
 
@@ -139,12 +134,19 @@ def todo_create(request):
     if request.method == 'POST':
         subject = request.POST.get('subject')
         content = request.POST.get('content')
-        todo = Todo.objects.create(
-            position=Todo.objects.count()+1,
-            element_title=subject,
-            content=content
-        )
-        data = {
-            'position': todo.position
-        }
+        try:
+            todo = Todo.objects.create(
+                position=Todo.objects.count() + 1,
+                element_title=subject,
+                content=content
+            )
+            data = {
+                'message': 'unique',
+                'position': todo.position
+            }
+        except IntegrityError:
+
+            data = {
+                'message': 'nonunique'
+            }
         return JsonResponse(data)
