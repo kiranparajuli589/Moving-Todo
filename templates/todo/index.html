@@ -53,7 +53,7 @@
 <!--    searchbox-->
 
 <!--    movetotopbutton-->
-    <button id="js-top" class="btn btn-primary"><i class="fas fa-arrow-alt-circle-up"></i></button>
+    <button id="js-top" class="btn btn-primary z-depth-1-half"><i class="fas fa-arrow-alt-circle-up"></i></button>
 <!--    movetotopbutton-->
 
     <div class="container bounce col-md-10" style="margin-top:30px;">
@@ -156,10 +156,52 @@
     <!-- Central Modal Small -->
 
     <script>
+            $('button[name=searchSubmit]').attr('disabled', 'disabled');
+            let elementsNameArray = {{ elements_name_array }};
+            $("#search").autocomplete({source: elementsNameArray});
             // Tooltips Initialization
             $(function () {
-                $('[data-toggle="tooltip"]').tooltip()
+                $('[data-toggle="tooltip"]').tooltip();
             });
+            function scrollAndColor(id) {
+                $("body,html").animate(
+                {
+                    scrollTop: $("#"+id).offset().top - 700
+                },
+                600); //speed//
+                if(!$("#"+id).find('.content_title').hasClass("anim")) {
+                    $("#"+id).find('.content_title').addClass("anim");
+                    setTimeout('$("#"+id).find(\'.content_title\').removeClass("anim");', 4000);
+                }
+            }
+            $(document).on('click', '#js-top', function (e) {
+                e.preventDefault();
+                window.scrollTo(0,0);
+            });
+            function showShifter() {
+                $("#shift-form").toggle(500);
+            }
+
+
+            function orderContainerId(){
+                let i=1;
+                $('.todos').children('.todo-box').each(function () {
+                    $(this).attr('id', i); // "this" is the current element in the loop
+                    i++;
+                });
+            }
+            orderContainerId();
+            function toggleButton(){
+                $(".todos").children().find(".top").show();
+                $(".todos").children().find(".up").show();
+                $(".todos").children().find(".down").show();
+                $(".todos").children().find(".bottom").show();
+                $(".todos").children().first().find(".top").hide();
+                $(".todos").children().first().find(".up").hide();
+                $(".todos").children().last().find(".down").hide();
+                $(".todos").children().last().find(".bottom").hide();
+            }
+            toggleButton();
 
             $(document).on('click', '#create', function (e) {
                 e.preventDefault();
@@ -204,33 +246,6 @@
                 })
             });
 
-
-            function showShifter() {
-                $("#shift-form").toggle(500);
-            }
-
-            var elementsNameArray = {{ elements_name_array }};
-            $("#search").autocomplete({source: elementsNameArray});
-
-            function orderContainerId(){
-                let i=1;
-                $('.todos').children('.todo-box').each(function () {
-                    $(this).attr('id', i); // "this" is the current element in the loop
-                    i++;
-                });
-            }
-            orderContainerId();
-            function toggleButton(){
-                $(".todos").children().find(".top").show();
-                $(".todos").children().find(".up").show();
-                $(".todos").children().find(".down").show();
-                $(".todos").children().find(".bottom").show();
-                $(".todos").children().first().find(".top").hide();
-                $(".todos").children().first().find(".up").hide();
-                $(".todos").children().last().find(".down").hide();
-                $(".todos").children().last().find(".bottom").hide();
-            }
-            toggleButton();
 
             //move to top
             $(document).on('click', '.top', function (e) {
@@ -348,14 +363,21 @@
                             $("#"+from).insertAfter("#"+to);
 
                         }
-                        scrollAndColor(from);
                         orderContainerId();
-                        toggleButton()
+                        toggleButton();
+                        scrollAndColor(to);
                     }
                 });
             }
-            $('#search').keypress(function (e) {
+            $('#search').keyup(function (e) {
                 let key = e.which;
+                if ($(this).val().length != 0){
+                    $('button[name=searchSubmit]').removeAttr('disabled');
+                }
+                else {
+                    $('button[name=searchSubmit]').attr('disabled', 'disabled');
+                }
+
                 if(key == 13)  // the enter key code
                 {
                     $('button[name = searchSubmit]').click();
@@ -383,25 +405,6 @@
                     $(this).show(); // "this" is the current element in the loop
                 });
             });
-            function scrollAndColor(id) {
-                $("body,html").animate(
-                {
-                    scrollTop: $("#"+id).offset().top - 320
-                },
-                600); //speed//
-                // $("#"+id).find(".content_title").addClass('glow');
-                // setTimeout(function(){
-                //     $("#"+id).find(".content_title").removeClass('glow');
-                // },2000);
-                if(!$("#"+id).find('.content_title').hasClass("anim")) {
-                    $("#"+id).find('.content_title').addClass("anim");
-                    setTimeout('$("#"+id).find(\'.content_title\').removeClass("anim");', 4000);
-                }
-            }
-            $(document).on('click', '#js-top', function (e) {
-                e.preventDefault();
-                window.scrollTo(0,0);
-            })
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 </body>

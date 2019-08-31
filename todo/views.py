@@ -91,7 +91,7 @@ def todo_shift(request):
     if request.method == "POST":
         from_position = request.POST.get('from')
         to_position = request.POST.get('to')
-        if from_position < to_position:
+        if int(from_position) < int(to_position):
             t = Todo.objects.filter(position__gt=from_position, position__lte=to_position)
             ts = Todo.objects.get(position=from_position)
             ts.position = None
@@ -104,7 +104,7 @@ def todo_shift(request):
                 'message': 'success'
             }
             return JsonResponse(data)
-        elif from_position > to_position:
+        elif int(from_position) > int(to_position):
             t = Todo.objects.filter(position__gte=to_position, position__lt=from_position)
             ts = Todo.objects.get(position=from_position)
             ts.position = None
@@ -117,7 +117,7 @@ def todo_shift(request):
                 'message': 'success'
             }
             return JsonResponse(data)
-        elif from_position is to_position:
+        elif int(from_position) is int(to_position):
             data = {
                 'message': 'equal'
             }
