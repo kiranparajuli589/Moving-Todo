@@ -236,6 +236,7 @@
             $(document).on('click', '.top', function (e) {
                 let id = $(this).parent().parent().attr('id');
                 $(this).parent().parent().prependTo(".todos");
+                orderContainerId();
                 toggleButton();
                 scrollAndColor('1');
                 $.ajax({
@@ -247,7 +248,7 @@
                     },
                     dataType: 'json',
                     success: function (e) {
-                        orderContainerId();
+
                     }
                 });
             });
@@ -370,10 +371,14 @@
                     scrollTop: $("#"+id).offset().top - 320
                 },
                 600); //speed//
-                $("#"+id).find(".content_title").addClass('glow');
-                setTimeout(function(){
-                    $("#"+id).find(".content_title").removeClass('glow');
-                },2000);
+                // $("#"+id).find(".content_title").addClass('glow');
+                // setTimeout(function(){
+                //     $("#"+id).find(".content_title").removeClass('glow');
+                // },2000);
+                if(!$("#"+id).find('.content_title').hasClass("anim")) {
+                    $("#"+id).find('.content_title').addClass("anim");
+                    setTimeout('$("#"+id).find(\'.content_title\').removeClass("anim");', 4000);
+                }
             }
             $(document).on('click', '#js-top', function (e) {
                 e.preventDefault();

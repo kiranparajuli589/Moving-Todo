@@ -65,3 +65,23 @@ body {
     font-size: x-large;
 }
 
+.anim {
+    animation:myfirst 4s 1;
+    -webkit-animation:myfirst 4s 1; /* Safari and Chrome */
+}
+
+@keyframes myfirst
+{
+    0%      {color:black;}
+    25%     {color:red;}
+    75%     {color:red;}
+    100%    {color:black;}
+}
+
+@-webkit-keyframes myfirst /* Safari and Chrome */
+{
+    0%      {color:black;}
+    25%     {color:red;}
+    75%     {color:red;}
+    100%    {color:black;}
+}
