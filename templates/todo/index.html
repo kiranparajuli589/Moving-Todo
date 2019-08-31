@@ -257,7 +257,9 @@
             $(document).on('click', '.bottom', function (e) {
                 let id = $(this).parent().parent().attr('id');
                 $(this).parent().parent().appendTo(".todos");
-                toggleButton();
+                $('html, body').animate({
+                    scrollTop: $('html, body').height()
+                }, 'slow');
                 $.ajax({
                     type: 'POST',
                     url: '{% url 'bottom' %}',
@@ -353,7 +355,7 @@
                 });
             }
             $('#search').keypress(function (e) {
-                var key = e.which;
+                let key = e.which;
                 if(key == 13)  // the enter key code
                 {
                     $('button[name = searchSubmit]').click();
@@ -363,7 +365,23 @@
                 e.preventDefault();
                 let text = $("#search").val();
                 let id = $('.content_title:contains("'+text+'")').parent().parent().parent().parent().attr('id');
-                scrollAndColor(id);
+                // scrollAndColor(id);
+                $('.todos').children('.todo-box').each(function () {
+                    $(this).hide(); // "this" is the current element in the loop
+                });
+                $("#"+id).show();
+            });
+            $(document).on('blur','button[name = searchSubmit]', function (e) {
+                e.preventDefault();
+                $('.todos').children('.todo-box').each(function () {
+                    $(this).show(); // "this" is the current element in the loop
+                });
+            });
+            $(document).on('blur','#search', function (e) {
+                e.preventDefault();
+                $('.todos').children('.todo-box').each(function () {
+                    $(this).show(); // "this" is the current element in the loop
+                });
             });
             function scrollAndColor(id) {
                 $("body,html").animate(
