@@ -42,6 +42,7 @@
     </nav>
     <!--/.Navbar-->
 
+    <!--searchbox-->
      <div class="container" style="margin-top: 70px">
          <form class="inline" style="text-align: center">
              {%csrf_token%}
@@ -49,6 +50,12 @@
              <button class="btn btn-primary" style="border-radius: 22px; padding: 16px" name="searchSubmit"><i class="fas fa-search" aria-hidden="true" style="font-size: large"></i></button>
          </form>
      </div>
+<!--    searchbox-->
+
+<!--    movetotopbutton-->
+    <button id="js-top" class="btn btn-primary"><i class="fas fa-arrow-alt-circle-up"></i></button>
+<!--    movetotopbutton-->
+
     <div class="container bounce col-md-10" style="margin-top:30px;">
         {%csrf_token%}
         <button id="show-shifter" class="btn aqua-gradient" onclick="showShifter()">Move Your Todo</button>
@@ -108,7 +115,9 @@
             {% endfor %}
         </div>
 
-        <div class="col-2"></div>
+        <div class="col-2">
+
+        </div>
       </div>
     </div>
 
@@ -169,14 +178,17 @@
 
 
                         if (data.message === 'nonunique') {
-                            $('<div class="text-danger">Todo with this Element title already exists.</div>')
-                            .insertAfter($("#subject"))
-                            .delay(2000)
-                            .fadeOut(function() {
-                                $(this).remove();
-                            });
+                            $('<div class="text-danger error-message" style="font-size: 13px;font-weight: bold;">Todo with this Element title already exists.</div>')
+                            .insertAfter($("#subject"));
+                            // .delay(2000)
+                            // .fadeOut(function() {
+                            //     $(this).remove();
+                            // });
+                            $("#subject").attr('style', 'border-bottom:2px solid red;');
                         }
                         else {
+                            $(".error-message").hide();
+                            $("#subject").removeAttr('style');
                             let ele = $("#1").clone();
                             ele.appendTo('.todos');
                             (ele.find('h3.content_title').text(subject));
@@ -198,7 +210,6 @@
             }
 
             var elementsNameArray = {{ elements_name_array }};
-            console.log(elementsNameArray);
             $("#search").autocomplete({source: elementsNameArray});
 
             function orderContainerId(){
@@ -224,9 +235,9 @@
             //move to top
             $(document).on('click', '.top', function (e) {
                 let id = $(this).parent().parent().attr('id');
-                console.log(id);
                 $(this).parent().parent().prependTo(".todos");
                 toggleButton();
+                scrollAndColor('1');
                 $.ajax({
                     type: 'POST',
                     url: '{% url 'top' %}',
@@ -237,9 +248,6 @@
                     dataType: 'json',
                     success: function (e) {
                         orderContainerId();
-                        scrollAndColor('1');
-
-
                     }
                 });
             });
@@ -353,7 +361,6 @@
             $(document).on('click','button[name = searchSubmit]', function (e) {
                 e.preventDefault();
                 let text = $("#search").val();
-                console.log(text);
                 let id = $('.content_title:contains("'+text+'")').parent().parent().parent().parent().attr('id');
                 scrollAndColor(id);
             });
@@ -368,6 +375,10 @@
                     $("#"+id).find(".content_title").removeClass('glow');
                 },2000);
             }
+            $(document).on('click', '#js-top', function (e) {
+                e.preventDefault();
+                window.scrollTo(0,0);
+            })
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 </body>

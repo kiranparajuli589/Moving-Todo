@@ -12,7 +12,6 @@ def index(request):
     element_names_array = []
     for t in todo:
         element_names_array.append(str(t.element_title))
-    print(element_names_array)
     context = {
         'elements_name_array': mark_safe(json.dumps(list(element_names_array), cls=DjangoJSONEncoder)),
         'todo_list': todo,
@@ -92,7 +91,6 @@ def todo_shift(request):
     if request.method == "POST":
         from_position = request.POST.get('from')
         to_position = request.POST.get('to')
-        print(from_position)
         if from_position < to_position:
             t = Todo.objects.filter(position__gt=from_position, position__lte=to_position)
             ts = Todo.objects.get(position=from_position)
@@ -109,16 +107,12 @@ def todo_shift(request):
         elif from_position > to_position:
             t = Todo.objects.filter(position__gte=to_position, position__lt=from_position)
             ts = Todo.objects.get(position=from_position)
-            print(from_position)
             ts.position = None
             for todo in t:
                 todo.position += 1
-                print(todo.position)
                 todo.save()
             ts.position = to_position
-            print(ts.position)
             ts.save()
-            print(ts.position)
             data = {
                 'message': 'success'
             }
