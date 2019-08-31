@@ -47,7 +47,7 @@
          <form class="inline" style="text-align: center">
              {%csrf_token%}
              <input class="col-md-3 z-depth-1" id="search" type="text" aria-label="Search" placeholder="Search Todo" style="border: 1px solid #4599dd; border-radius: 6px; padding: 10px; margin-top: 15px">
-             <button class="btn btn-primary" style="border-radius: 22px; padding: 16px" name="searchSubmit"><i class="fas fa-search" aria-hidden="true" style="font-size: large"></i></button>
+             <button class="btn btn-primary" style="border-radius: 22px; padding: 13px 14px 13px 14px;" name="searchSubmit"><i class="fas fa-search" aria-hidden="true" style="font-size: large"></i></button>
          </form>
      </div>
 <!--    searchbox-->
@@ -61,13 +61,13 @@
         <button id="show-shifter" class="btn aqua-gradient" onclick="showShifter()">Move Your Todo</button>
     </div>
     <form style="text-align: center; display: none" class="inline" id="shift-form">
-            {%csrf_token%}
-            <span style="font-size: 18px; font-weight: 450">POSITION:</span>
-            <input type="number" id="from" placeholder="From" style="margin: 10px 0px 0 20px; width: 105px;border: 2px solid #33b5e58f;
-    border-radius: 5px;padding: 5px">
-            <span style="margin: 0 20px 0 20px; font-size: 18px; font-weight: 450"><i class="fas fa-hand-point-right"></i></span>
-            <input type="number" id="to" placeholder="To" style=" width: 105px; border: 2px solid #33b5e58f;
-    border-radius: 5px;padding: 5px">
+        {%csrf_token%}
+        <span style="font-size: 18px; font-weight: 450">POSITION:</span>
+        <input type="number" id="from" placeholder="From" style="margin: 10px 0px 0 20px; width: 105px;border: 2px solid #33b5e58f;
+                                                                 border-radius: 5px;padding: 5px">
+        <span style="margin: 0 20px 0 20px; font-size: 18px; font-weight: 450"><i class="fas fa-hand-point-right"></i></span>
+        <input type="number" id="to" placeholder="To" style=" width: 105px; border: 2px solid #33b5e58f;
+                                                              border-radius: 5px;padding: 5px">
         <button type="submit" onclick="formSubmit(event)" class="btn btn-primary btn-rounded" id="submit" style="font-size: 20px; padding: 12px 32px">MOVE</button>
 
         </form>
