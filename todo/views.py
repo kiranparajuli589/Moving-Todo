@@ -8,6 +8,12 @@ from .models import Todo
 
 
 def index(request):
+    try:
+        t = Todo.objects.create(position=1,
+                                element_title="Sample Todo 1",
+                                content="This is a sample todo")
+    except IntegrityError:
+        pass
     todo = Todo.objects.order_by('position')
     element_names_array = []
     for t in todo:
@@ -61,7 +67,7 @@ def to_up(request):
     if request.method == "POST":
         pos = request.POST.get('position')
         ts = Todo.objects.get(position=pos)
-        ts1 = Todo.objects.get(position=int(pos)+1)
+        ts1 = Todo.objects.get(position=int(pos)-1)
         # swapping position values
         ts.position, ts1.position = ts1.position, ts.position
         ts.save()
@@ -75,8 +81,9 @@ def to_up(request):
 def to_down(request):
     if request.method == "POST":
         pos = request.POST.get('position')
+        print(pos)
         ts = Todo.objects.get(position=pos)
-        ts1 = Todo.objects.get(position=int(pos)-1)
+        ts1 = Todo.objects.get(position=int(pos)+1)
         # swapping position values
         ts.position, ts1.position = ts1.position, ts.position
         ts.save()
@@ -134,6 +141,7 @@ def todo_create(request):
                 element_title=subject,
                 content=content
             )
+            todo.save()
             data = {
                 'message': 'unique',
                 'position': todo.position

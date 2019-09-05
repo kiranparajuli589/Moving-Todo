@@ -2,7 +2,7 @@
 {% load static %}
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>ToDo</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
@@ -127,30 +127,27 @@
 
       <!-- Change class .modal-sm to change the size of the modal -->
       <div class="modal-dialog modal-sm" role="document">
-
-
-        <div class="modal-content">
-          <div class="modal-header" style="background: #4285f4!important; color: white;">
-            <h4 class="modal-title w-100" id="myModalLabel">Create Todo</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-            <form method="POST">
-                {%csrf_token%}
-                <div class="modal-body">
-                <!-- Material input -->
-                <div class="md-form">
-    <!--                <input type="number" id="position" class="form-control" placeholder="Position" min="{{minimum}}" max="10000">-->
-                    <input type="text" id="subject" class="form-control" placeholder="Subject">
-                    <input type="text" id="content" class="form-control" placeholder="Content">
+          <form>
+              <div class="modal-content">
+                  <div class="modal-header" style="background: #4285f4!important; color: white;">
+                    <h4 class="modal-title w-100" id="myModalLabel">Create Todo</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                    {%csrf_token%}
+                    <div class="modal-body">
+                    <!-- Material input -->
+                        <div class="md-form">
+                            <input type="text" id="subject" class="form-control" placeholder="Subject" required="required" />
+                            <input type="text" id="content" class="form-control" placeholder="Content" required="required" />
+                        </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button id="create" type="submit" class="btn btn-primary btn-sm">Create</button>
+                  </div>
                 </div>
-              </div>
-              <div class="modal-footer">
-                <button id="create" type="submit" class="btn btn-primary btn-sm">Save changes</button>
-              </div>
-            </form>
-        </div>
+          </form>
       </div>
     </div>
     <!-- Central Modal Small -->
@@ -163,16 +160,20 @@
             $(function () {
                 $('[data-toggle="tooltip"]').tooltip();
             });
-            function scrollAndColor(id) {
+            function colorTitle(id){
+                if(!$("#"+id).find('.content_title').hasClass("anim")) {
+                    $("#"+id).find('.content_title').addClass("anim");
+                    setTimeout('$("#"+id).find(\'.content_title\').removeClass("anim");', 4000);
+                }
+            }
+
+            function scroll(id) {
                 $("body,html").animate(
                 {
                     scrollTop: $("#"+id).offset().top - 700
                 },
                 600); //speed//
-                if(!$("#"+id).find('.content_title').hasClass("anim")) {
-                    $("#"+id).find('.content_title').addClass("anim");
-                    setTimeout('$("#"+id).find(\'.content_title\').removeClass("anim");', 4000);
-                }
+
             }
             $(document).on('click', '#js-top', function (e) {
                 e.preventDefault();
@@ -221,14 +222,15 @@
 
                         if (data.message === 'nonunique') {
                             $('<div class="text-danger error-message" style="font-size: 13px;font-weight: bold;">Todo with this Element title already exists.</div>')
-                            .insertAfter($("#subject"));
-                            // .delay(2000)
-                            // .fadeOut(function() {
-                            //     $(this).remove();
-                            // });
+                            .insertAfter($("#subject"))
+                            .delay(2000)
+                            .fadeOut(function() {
+                                $(this).remove();
+                            });
                             $("#subject").attr('style', 'border-bottom:2px solid red;');
                         }
                         else {
+                            console.log(data.message);
                             $(".error-message").hide();
                             $("#subject").removeAttr('style');
                             let ele = $("#1").clone();
@@ -236,9 +238,15 @@
                             (ele.find('h3.content_title').text(subject));
                             ele.find('.content-pos').text('#'+data.position);
                             ele.find('.content-text').text(content);
+                            $('html, body').animate({
+                                scrollTop: $('html, body').height()
+                            }, 'slow');
                             orderContainerId();
                             toggleButton();
-                            scrollAndColor(data.position);
+                            colorTitle(data.position);
+
+                            $("#subject").val("");
+                            $("#content").val("");
                         }
 
 
@@ -253,7 +261,8 @@
                 $(this).parent().parent().prependTo(".todos");
                 orderContainerId();
                 toggleButton();
-                scrollAndColor('1');
+                scroll('1');
+                colorTitle('1');
                 $.ajax({
                     type: 'POST',
                     url: '{% url 'top' %}',
@@ -286,18 +295,18 @@
                     success: function (data) {
                         orderContainerId();
                         toggleButton();
-                        scrollAndColor(data.total);
+                        colorTitle(data.total);
                     }
                 });
             });
             //move up
             $(document).on('click', '.up', function (e) {
                 let id = $(this).parent().parent().attr('id');
-                id = (id - 1).toString();
+                idd = (id - 1).toString();
                 $(this).parent().parent().fadeOut(200);
-                $("#"+id).fadeOut("slow");
-                $(this).parent().parent().insertBefore("#"+id);
-                $("#"+id).fadeIn("slow");
+                $("#"+idd).fadeOut("slow");
+                $(this).parent().parent().insertBefore("#"+idd);
+                $("#"+idd).fadeIn("slow");
                 $(this).parent().parent().show().fadeIn(200);
                 toggleButton();
                 $.ajax({
@@ -309,6 +318,7 @@
                     },
                     dataType: 'json',
                     success: function (e) {
+                        colorTitle(id);
                         orderContainerId();
                         toggleButton()
                     }
@@ -317,12 +327,12 @@
             //move down
             $(document).on('click', '.down', function (e) {
                 let id = parseInt($(this).parent().parent().attr('id'));
-                id = id + 1;
+                idd = id + 1;
                 $(this).parent().parent().fadeOut(200);
-                $("#"+id).fadeOut("slow");
+                $("#"+idd).fadeOut("slow");
                 $(this).parent().parent()
-                .insertAfter("#"+id);
-                $("#"+id).fadeIn("slow");
+                .insertAfter("#"+idd);
+                $("#"+idd).fadeIn("slow");
                 $(this).parent().parent().show().fadeIn(200);
 
                 toggleButton();
@@ -335,6 +345,7 @@
                     },
                     dataType: 'json',
                     success: function (e) {
+                        colorTitle(id);
                         orderContainerId();
                         toggleButton()
                     }
@@ -365,7 +376,8 @@
                         }
                         orderContainerId();
                         toggleButton();
-                        scrollAndColor(to);
+                        colorTitle(to);
+                        scroll(to);
                     }
                 });
             }
