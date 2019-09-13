@@ -20,8 +20,9 @@ html {
 }
 
 .bounce {
-      text-align:center;
-     -webkit-animation: bounce 2s infinite;
+    margin-top:30px;
+    text-align:center;
+    -webkit-animation: bounce 2s infinite;
 }
 body {
     background-color: #c0c0c0;
@@ -70,4 +71,70 @@ body {
 }
 #show-shifter {
     font-size: 16px;
+}
+.modal-header {
+    background: #4285f4!important;
+    color: white;
+}
+.b-c {
+    display: block;
+    text-align: center;
+    margin:-10px 0 0px 0;
+    padding-bottom: 5px
+}
+.content-id-tag {
+    padding: 0 10px 0 0;
+}
+.content_title {
+    color:#4285f4;
+    margin: 25px 0 7px 0;
+}
+.todo-box {
+    background-color:#f6f6f6;
+    margin-bottom: 10px;
+}
+#shift-form {
+    text-align: center;
+    display: none
+}
+.span-1 {
+    font-size: 18px;
+    font-weight: 450;
+}
+#from {
+    margin: 10px 0 0 20px;
+    width: 105px;
+    border: 2px solid #33b5e58f;
+    border-radius: 5px;
+    padding: 5px;
+}
+.span-2 {
+    margin: 0 20px 0 20px;
+    font-size: 18px;
+    font-weight: 450
+}
+#to {
+    width: 105px;
+    border: 2px solid #33b5e58f;
+    border-radius: 5px;
+    padding: 5px;
+}
+#submit {
+    font-size: 20px;
+    padding: 12px 32px;
+}
+#search {
+    border: 1px solid #4599dd;
+    border-radius: 6px;
+    padding: 10px;
+    margin-top: 15px;
+}
+button[name="searchSubmit"] {
+    border-radius: 22px;
+    padding: 13px 14px 13px 14px;
+}
+.nav-button  {
+    margin:0;
+    padding: 15px 17px;
+    border-radius: 26px;
 }
