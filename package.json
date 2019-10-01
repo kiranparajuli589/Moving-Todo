@@ -1,0 +1,27 @@
+{
+  "name": "moving-todo",
+  "version": "1.0.0",
+  "description": "python -m venv myenv source myenv/bin/activate #install requirements pip install -r requirements.txt",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js --require test/acceptance -f node_modules/cucumber-pretty"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kiranparajuli589/Moving-Todo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kiranparajuli589/Moving-Todo/issues"
+  },
+  "homepage": "https://github.com/kiranparajuli589/Moving-Todo#readme",
+  "devDependencies": {
+    "cucumber": "^5.1.0",
+    "nightwatch": "^1.2.4",
+    "nightwatch-api": "^2.3.0"
+  },
+  "dependencies": {
+    "cucumber-pretty": "^1.5.2"
+  }
+}
