@@ -33,19 +33,20 @@
 </head>
 <body>
     <!--Navbar-->
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark primary-color">
+<!--    <nav class="navbar fixed-top navbar-expand-lg navbar-dark primary-color">-->
+        <nav class="fixed-top navbar-expand-lg navbar-dark primary-color">
 
       <!-- Navbar brand -->
         <a class="navbar-brand" href="#">TODO</a>
         <button class="btn aqua-gradient nav-button" type="button" data-toggle="modal" data-target="#myModal">
-            <i class="fas fa-plus" style="font-size: larger" data-toggle="tooltip" title="Create New Todo"></i>
+            <i class="fas fa-plus" style="font-size: larger;" data-toggle="tooltip" title="Create New Todo"></i>
         </button>
     </nav>
     <!--/.Navbar-->
 
     <!--searchbox-->
      <div class="container" style="margin-top: 70px">
-         <form class="inline" style="text-align: center">
+         <form class="" style="text-align: center">
              {%csrf_token%}
              <input class="col-md-3 z-depth-1" id="search" type="text" aria-label="Search" placeholder="Search Todo">
              <button class="btn btn-primary" name="searchSubmit">
@@ -59,20 +60,20 @@
     <button id="js-top" class="btn btn-primary z-depth-1-half"><i class="fas fa-arrow-alt-circle-up"></i></button>
 <!--    movetotopbutton-->
 
-    <div class="container bounce col-md-10">
-        {%csrf_token%}
-        <button id="show-shifter" class="btn aqua-gradient" onclick="showShifter()">Move Your Todo</button>
-    </div>
+<!--    <div class="container bounce col-md-10">-->
+<!--        {%csrf_token%}-->
+<!--        <button id="show-shifter" class="btn aqua-gradient" onclick="showShifter()">Move Your Todo</button>-->
+<!--    </div>-->
 <!--    shifter-form-->
-    <form class="inline" id="shift-form">
-        {%csrf_token%}
-        <span class="span-1">POSITION:</span>
-        <input type="number" id="from" placeholder="From">
-        <span class="span-2"><i class="fas fa-hand-point-right"></i></span>
-        <input type="number" id="to" placeholder="To">
-        <button type="submit" onclick="formSubmit(event)" class="btn btn-primary btn-rounded" id="submit">MOVE</button>
+<!--    <form class="inline" id="shift-form">-->
+<!--        {%csrf_token%}-->
+<!--        <span class="span-1">POSITION:</span>-->
+<!--        <input type="number" id="from" placeholder="From">-->
+<!--        <span class="span-2"><i class="fas fa-hand-point-right"></i></span>-->
+<!--        <input type="number" id="to" placeholder="To">-->
+<!--        <button type="submit" onclick="formSubmit(event)" class="btn btn-primary btn-rounded" id="submit">MOVE</button>-->
 
-    </form>
+<!--    </form>-->
 
 <!--        todo-content-window-->
 
