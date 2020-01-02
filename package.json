@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/kiranparajuli589/Moving-Todo#readme",
   "devDependencies": {
+    "chromedriver": "^79.0.0",
     "cucumber": "^5.1.0",
+    "geckodriver": "^1.19.1",
     "nightwatch": "^1.2.4",
     "nightwatch-api": "^2.3.0"
   },
