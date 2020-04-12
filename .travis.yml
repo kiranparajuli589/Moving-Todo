@@ -18,4 +18,6 @@ before_script:
 
 script: npm test test/acceptance/features/
 
-cache: pip
+cache:
+  - pip
+  - npm
