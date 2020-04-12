@@ -99,7 +99,7 @@ module.exports = {
 
     elements: {
         createNewTodoButton: {
-            selector: '//button[@data-target="#myModal"]',
+            selector: '//button[@data-target="#create-todo-modal"]',
             locateStrategy: 'xpath'
         },
         modalDiv: {
