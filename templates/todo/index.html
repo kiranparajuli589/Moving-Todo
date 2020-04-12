@@ -38,8 +38,8 @@
 
       <!-- Navbar brand -->
         <a class="navbar-brand" href="#">TODO</a>
-        <button class="btn aqua-gradient nav-button" type="button" data-toggle="modal" data-target="#myModal">
-            <i class="fas fa-plus" style="font-size: larger;" data-toggle="tooltip" title="Create New Todo"></i>
+        <button id="create-todo-btn" class="btn aqua-gradient nav-button" type="button" data-toggle="modal" data-target="#myModal">
+            <i class="fas fa-plus" style="font-size: larger" data-toggle="tooltip" title="Create New Todo"></i>
         </button>
     </nav>
     <!--/.Navbar-->
@@ -57,7 +57,9 @@
 <!--    searchbox-->
 
 <!--    movetotopbutton-->
-    <button id="js-top" class="btn btn-primary z-depth-1-half"><i class="fas fa-arrow-alt-circle-up"></i></button>
+    <button id="js-top" class="btn btn-primary z-depth-1-half" data-toggle="tooltip" title="Scroll To Top">
+        <i class="fas fa-arrow-alt-circle-up"></i>
+    </button>
 <!--    movetotopbutton-->
 
 <!--    <div class="container bounce col-md-10">-->
@@ -82,12 +84,7 @@
         <div class="col-sm-2"></div>
 
         <div class="col-lg todos" >
-
-
-
-
           {% for todo in todo_list %}
-
             <div id='{{forloop.counter}}' class="z-depth-1-half m-4 todo-box">
                 <div style="padding-top: 2px">
                     <div style="border-left: 3px solid #4285f4; padding-left: 30px; margin-left: 20px;">
@@ -101,17 +98,19 @@
                                     </div>
                                 </div>
                                 <div class="col-md-1 content-id-tag">
-                                    <p class="content-pos">#{{todo.id}}</p>
+                                    <p data-toggle="tooltip" title="pk in db" class="content-pos">#{{todo.id}}</p>
                                 </div>
                             </div>
                         </div>
                 </div>
                 <hr>
-                <div class="button-container{{forloop.counter}} b-c">
-                    <a class="top m-1" data-toggle="tooltip" title="To Top"><i class="fas fa-chevron-circle-up" style="font-size: 18px"></i></a>
-                    <a class="up m-1" data-toggle="tooltip" title="Move Up"><i class="fas fa-caret-square-up" style="font-size: 18px"></i></a>
-                    <a class="down m-1" data-toggle="tooltip" title="Move Down"><i class="fas fa-caret-square-down" style="font-size: 18px"></i></a>
-                    <a class="bottom m-1" data-toggle="tooltip" title="To Bottom"><i class="fas fa-chevron-circle-down" style="font-size: 18px"></i></a>
+                <div class="b-c{{forloop.counter}} button-container">
+                    <a class="edit m-1" data-toggle="modal" data-target="#edit-todo-modal"><i data-toggle="tooltip" title="Edit Todo" class="fas fa-edit"></i></a>
+                    <a class="top m-1" data-toggle="tooltip" title="To Top"><i class="fas fa-chevron-circle-up"></i></a>
+                    <a class="up m-1" data-toggle="tooltip" title="Move Up"><i class="fas fa-caret-square-up"></i></a>
+                    <a class="down m-1" data-toggle="tooltip" title="Move Down"><i class="fas fa-caret-square-down"></i></a>
+                    <a class="bottom m-1" data-toggle="tooltip" title="To Bottom"><i class="fas fa-chevron-circle-down"></i></a>
+                    <a class="delete m-1" data-toggle="tooltip" title="Delete Todo"><i class="fas fa-trash"></i></a>
                 </div>
               </div>
             {% endfor %}
@@ -123,10 +122,9 @@
       </div>
     </div>
 
-    <!-- Central Modal Small -->
-    <div id="myModal" class="modal fade" id="centralModalSm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    <!-- Create TodoEntry Modal -->
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
       aria-hidden="true">
-
       <!-- Change class .modal-sm to change the size of the modal -->
       <div class="modal-dialog modal-sm" role="document">
           <form>
@@ -152,7 +150,37 @@
           </form>
       </div>
     </div>
-    <!-- Central Modal Small -->
+    <!-- Create TodoEntry Modal -->
+
+    <!-- Edit TodoEntry Modal -->
+    <div id="edit-todo-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <!-- Change class .modal-sm to change the size of the modal -->
+        <div class="modal-dialog modal-sm" role="document">
+            <form>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title w-100" id="editTodoModalLabel">Edit Todo</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {%csrf_token%}
+                    <div class="modal-body">
+                        <!-- Material input -->
+                        <div class="md-form">
+                            <input type="text" id="edit-subject" class="form-control" placeholder="Subject" required="required" />
+                            <input type="text" id="edit-content" class="form-control" placeholder="Content" required="required" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="edit-todo" type="submit" class="btn btn-primary btn-sm">Create</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Edit TodoEntry Modal -->
 
     <script src="{% static 'js/main.js' %}" type="text/javascript"></script>
     <script>
