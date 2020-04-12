@@ -1,36 +1,17 @@
 html {
   scroll-behavior: smooth;
 }
-/*@-webkit-keyframes bounce {*/
-/*        0% {*/
-/*    transform: scale(1,1) translate(0px, 0px);*/
-/*  }*/
-
-/*  30%{*/
-/*    transform: scale(1,0.8) translate(0px, 10px);*/
-/*  }*/
-
-/*  75%{*/
-/*    transform: scale(1,1.1) translate(0px, -25px);*/
-/*  }*/
-
-/* 100% {*/
-/*    transform: scale(1,1) translate(0px, 0px);*/
-/*  }*/
-/*}*/
-
 .bounce {
-    margin-top:30px;
+    margin-top:20px;
     text-align:center;
-    /*-webkit-animation: bounce 2s infinite;*/
 }
 body {
     background-color: #c0c0c0;
-    zoom: 80%;
+    zoom: 90%;
 }
 .modal-open{
     zoom:100%;
-    transition: zoom 2s ease !important;
+    transition: zoom 4s ease !important;
 }
 
 .input-error{
@@ -40,8 +21,6 @@ body {
     position: fixed!important;
     right: 10px;
     bottom: 10px;
-    /*text-decoration: none;*/
-    /*text-align: center;*/
     border-radius: 35px;
     padding: 14px 15px 14px 15px;
 }
@@ -49,26 +28,25 @@ body {
     font-size: x-large;
 }
 
+@keyframes todoSubjectAnim
+{
+    0%      {color:black;}
+    25%     {color:red;}
+    75%     {color:red;}
+    100%    {color:black;}
+}
+@-webkit-keyframes todoSubjectAnim /* Safari and Chrome */
+{
+    0%      {color:black;}
+    25%     {color:red;}
+    75%     {color:red;}
+    100%    {color:black;}
+}
 .anim {
-    animation:myfirst 4s 1;
-    -webkit-animation:myfirst 4s 1; /* Safari and Chrome */
+    animation:todoSubjectAnim 3s 1;
+    -webkit-animation:todoSubjectAnim 3s 1; /* Safari and Chrome */
 }
 
-@keyframes myfirst
-{
-    0%      {color:black;}
-    25%     {color:red;}
-    75%     {color:red;}
-    100%    {color:black;}
-}
-
-@-webkit-keyframes myfirst /* Safari and Chrome */
-{
-    0%      {color:black;}
-    25%     {color:red;}
-    75%     {color:red;}
-    100%    {color:black;}
-}
 #show-shifter {
     font-size: 16px;
 }
@@ -99,7 +77,7 @@ body {
 }
 .span-1 {
     font-size: 18px;
-    font-weight: 450;
+    font-weight: 500;
 }
 #from {
     margin: 10px 0 0 20px;
@@ -127,11 +105,21 @@ body {
     border: 1px solid #4599dd;
     border-radius: 6px;
     padding: 10px;
-    margin-top: 15px;
+    margin-top: 50px;
+}
+.search-form {
+    text-align: center;
 }
 button[name="searchSubmit"] {
     border-radius: 22px;
     padding: 13px 14px 13px 14px;
+}
+nav {
+    padding: 10px;
+}
+.navbar-brand {
+    font-size: 26px;
+    font-weight: bold;
 }
 .nav-button  {
     margin:0;
@@ -158,3 +146,29 @@ button[name="searchSubmit"] {
 .fas {
     font-size: 18px
 }
+.fa-search {
+    font-size: large!important;
+}
+.date-created {
+    position: absolute;
+    right: 50px;
+    margin-top: -40px;
+}
+.search-box {
+    margin-top: 70px;
+}
+.left-bar {
+    border-left: 3px solid #4285f4;
+    padding-left: 30px;
+    margin-left: 20px;
+}
+button[type=submit] {
+    font-size: large!important;
+}
+.fa-clock {
+    color: #2b1355;
+}
+.content-pos {
+    font-weight: bold;
+}
+
