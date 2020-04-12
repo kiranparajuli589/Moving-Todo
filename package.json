@@ -1,27 +1,25 @@
 {
   "name": "moving-todo",
   "version": "1.0.0",
-  "description": "python -m venv myenv source myenv/bin/activate #install requirements pip install -r requirements.txt",
+  "description": "Simple todo app where you can move you todo up and down :)",
   "main": "index.js",
   "scripts": {
-    "test": "cucumber-js --require test/acceptance -f node_modules/cucumber-pretty"
+    "test": "node_modules/cucumber/bin/cucumber-js --require test/acceptance -f node_modules/cucumber-pretty"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kiranparajuli589/Moving-Todo.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Kiran Parajuli",
   "bugs": {
     "url": "https://github.com/kiranparajuli589/Moving-Todo/issues"
   },
   "homepage": "https://github.com/kiranparajuli589/Moving-Todo#readme",
   "devDependencies": {
-    "cucumber": "^5.1.0",
-    "nightwatch": "^1.2.4",
-    "nightwatch-api": "^2.3.0"
-  },
-  "dependencies": {
-    "cucumber-pretty": "^1.5.2"
+    "chromedriver": "^81.0.0",
+    "cucumber": "^6.0.5",
+    "cucumber-pretty": "^6.0.0",
+    "nightwatch": "^1.3.4",
+    "nightwatch-api": "^3.0.1"
   }
 }
