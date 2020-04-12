@@ -195,6 +195,4 @@ venv.bak/
 .mypy_cache/
 
 .idea/
-
 node_modules/
-/package-lock.json

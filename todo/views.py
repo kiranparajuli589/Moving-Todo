@@ -149,6 +149,6 @@ def todo_create(request):
         except IntegrityError:
 
             data = {
-                'message': 'nonunique'
+                'message': 'non-unique'
             }
         return JsonResponse(data)

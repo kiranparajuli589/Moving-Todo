@@ -1,28 +1,28 @@
 html {
   scroll-behavior: smooth;
 }
-@-webkit-keyframes bounce {
-        0% {
-    transform: scale(1,1) translate(0px, 0px);
-  }
+/*@-webkit-keyframes bounce {*/
+/*        0% {*/
+/*    transform: scale(1,1) translate(0px, 0px);*/
+/*  }*/
 
-  30%{
-    transform: scale(1,0.8) translate(0px, 10px);
-  }
+/*  30%{*/
+/*    transform: scale(1,0.8) translate(0px, 10px);*/
+/*  }*/
 
-  75%{
-    transform: scale(1,1.1) translate(0px, -25px);
-  }
+/*  75%{*/
+/*    transform: scale(1,1.1) translate(0px, -25px);*/
+/*  }*/
 
- 100% {
-    transform: scale(1,1) translate(0px, 0px);
-  }
-}
+/* 100% {*/
+/*    transform: scale(1,1) translate(0px, 0px);*/
+/*  }*/
+/*}*/
 
 .bounce {
     margin-top:30px;
     text-align:center;
-    -webkit-animation: bounce 2s infinite;
+    /*-webkit-animation: bounce 2s infinite;*/
 }
 body {
     background-color: #c0c0c0;
@@ -76,7 +76,7 @@ body {
     background: #4285f4!important;
     color: white;
 }
-.b-c {
+.button-container {
     display: block;
     text-align: center;
     margin:-10px 0 0px 0;
@@ -111,7 +111,7 @@ body {
 .span-2 {
     margin: 0 20px 0 20px;
     font-size: 18px;
-    font-weight: 450
+    font-weight: 450;
 }
 #to {
     width: 105px;
@@ -137,4 +137,24 @@ button[name="searchSubmit"] {
     margin:0;
     padding: 15px 17px;
     border-radius: 26px;
+}
+#error-message {
+    font-size: 13px;
+    font-weight: bold;
+}
+.error-in-input {
+    border-bottom: 2px solid red!important;
+}
+.delete {
+    position: absolute;
+    right: 50px;
+    color: #c81f2a!important;
+}
+.edit {
+    position: absolute;
+    left: 50px;
+    color: #1e6f80 !important;
+}
+.fas {
+    font-size: 18px
 }
