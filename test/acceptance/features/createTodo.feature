@@ -12,7 +12,7 @@ Feature: createTodo
 
   Scenario: user should not be able to create a todo entering subject only
     When the user creates a todo entering subject "subject" only
-    Then an error with content error message "Please enter content of your todo!" should be visible below content field
+    Then an error with content error message "Please add content for your todo!" should be visible below content field
 
   Scenario: user should not be able to create a todo entering content only
     When the user tries to create a todo entering content "content" only

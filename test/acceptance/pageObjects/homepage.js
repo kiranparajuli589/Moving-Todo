@@ -31,7 +31,7 @@ module.exports = {
                 .click('@createButton')
                 .click('@closeBtn')
         },
-        contentErrorMessageVisibleBelowContentField(callback){
+        contentErrorMessageShouldBeVisibleBelowContentField(callback){
             return this.waitForElementVisible('@errorMessageCss')
                 .getText('@errorMessageCss', result => {
                    callback(result.value);
@@ -58,7 +58,6 @@ module.exports = {
                 .setValue('@subjectField', '')
                 .setValue('@contentField', '')
                 .click('@createButton')
-                .click('@closeBtn')
         },
         triesToCreateTodoWithExistingSubjectAndContent(subject, content) {
             return this.waitForElementVisible('@createNewTodoButton')
@@ -88,6 +87,7 @@ module.exports = {
         entersDesiredSubjectInSearchField(subject){
             return this.waitForElementVisible('@searchField')
                 .setValue('@searchField', subject)
+                .pause(3000)
         },
         todoWithDesiredSubjectsAreListedInAutocompleteMenu(callback){
             return this.waitForElementVisible("@searchSuggestions")
@@ -121,10 +121,9 @@ module.exports = {
             selector: "//div[contains(@class, 'todo-box') and div//h3/text() = '%s' and div//p/text()='%s']",
             locateStrategy: 'xpath'
         },
-        errorMessageCss:
-            {
-                selector: '.error-message'
-            },
+        errorMessageCss:{
+            selector: '#error-message'
+        },
         todoBoxTitle: {
             selector: "//div[contains(@class, 'todo-box') and div//h3/text()='%s']",
             locateStrategy: 'xpath'
