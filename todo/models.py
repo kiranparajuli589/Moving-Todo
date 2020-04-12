@@ -11,4 +11,3 @@ class Todo(models.Model):
     content = models.TextField()
     position = models.IntegerField(unique=True)
     date_created = models.DateTimeField(auto_now_add=NOW)
-

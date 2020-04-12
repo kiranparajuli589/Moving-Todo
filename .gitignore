@@ -195,5 +195,4 @@ venv.bak/
 .mypy_cache/
 
 .idea/
-
 node_modules/
