@@ -4,14 +4,17 @@ const searchFieldSelector = '#search'
 const searchSubmitButtonSelector = 'button[name=searchSubmit]'
 const todoListSelector = '.todos'
 const todoBoxSelector = '.todo-box'
+const todoBoxPKSelector = '.todo-pk'
 const csrfInputSelector = 'input[name=csrfmiddlewaretoken]'
-const contentTitleSelector = '.content_title'
+const todoContentTitleSelector = '.content-title'
+const todoContentTextSelector = '.content-text'
 const htmlBodySelector = 'body, html'
 const shiftFormSelector = '#shift-form'
 const shiftFromInputSelector = '#from'
 const shiftToInputSelector = '#to'
 const todoAnimationClassSelector = 'anim'
 const errOnInputClassSelector = 'error-in-input'
+const errorMessageSelector = '#error-message'
 const todoButtonContainerSelector = '.button-container'
 const editSubjectFieldSelector = '#edit-subject'
 const editContentFieldSelector = '#edit-content'
@@ -27,7 +30,7 @@ $(function () {
  * @param id
  */
 function colorTitle(id){
-    const el = $(`#${id}`).find(contentTitleSelector)
+    const el = $(`#${id}`).find(todoContentTitleSelector)
     if(!el.hasClass(todoAnimationClassSelector)) {
         el.addClass(todoAnimationClassSelector);
     }
@@ -120,7 +123,7 @@ $(searchFieldSelector).keyup(function (e) {
 $(document).on('click', searchSubmitButtonSelector, function (e) {
     e.preventDefault();
     let text = $(searchFieldSelector).val();
-    let id = $(`${contentTitleSelector}:contains(${text})`).parent().parent().parent().parent().attr('id');
+    let id = $(`${todoContentTitleSelector}:contains(${text})`).parent().parent().parent().parent().attr('id');
     console.log(id)
     $(todoListSelector).children(todoBoxSelector).each(function () {
         $(this).hide(); // "this" is the current element in the loop
@@ -183,21 +186,23 @@ $(document).on('click', '#create', function (e) {
         success: function (data) {
             console.log(data)
             if (data.message === 'non-unique') {
-                $('<div class="text-danger" id="error-message">Todo with this Element title already exists.</div>')
+                $(`<div id="${errorMessageSelector.slice(1)}">Todo with this Element title already exists.</div>`)
                 .insertAfter($(subjectSelector))
                 $(subjectSelector).addClass(errOnInputClassSelector);
             }
             else {
-                // if everything is ok then create a new todoBox for our brand new todoEntry
                 console.log(data.message);
+                // if everything is ok then create a new todoBox for our brand new todoEntry
                 let ele = $(todoBoxSelector).first().clone();
                 ele.appendTo(todoListSelector);
-                (ele.find('h3.content_title').text(subject));
-                ele.find('.todo-pk').text('#'+data.position);
-                ele.find('.content-text').text(content);
+                ele.find(todoContentTitleSelector).text(subject);
+                ele.find(todoBoxPKSelector).text('#'+data.position);
+                ele.find(todoContentTextSelector).text(content);
+                //scroll to new todoEntry just created
                 $(htmlBodySelector).animate({
                     scrollTop: $(htmlBodySelector).height()
                 }, 'slow');
+
                 orderContainerId();
                 toggleButton();
                 colorTitle(data.position);
@@ -361,9 +366,9 @@ function shiftFormSubmit(e) {
  */
 $(document).on('click', '.edit', function (e) {
     e.preventDefault();
-    const pk = $(this).parent().parent().find('.todo-pk')[0].innerText.trim()
-    const subject = $(this).parent().parent().find('.content_title')[0].innerHTML
-    const content = $(this).parent().parent().find('.content-text')[0].innerHTML
+    const pk = $(this).parent().parent().find(todoBoxPKSelector)[0].innerText.trim()
+    const subject = $(this).parent().parent().find(todoContentTitleSelector)[0].innerHTML
+    const content = $(this).parent().parent().find(todoContentTextSelector)[0].innerHTML
     const spanElement = $(editModalSpanSelector)
     let spanContent = spanElement[0].innerText
     if (spanContent === '#') {
@@ -373,36 +378,12 @@ $(document).on('click', '.edit', function (e) {
     $(editContentFieldSelector).val(content)
 })
 
-/**
- * update todoBox after successful edit
- * @param pk PK of todoEntry
- * @param subject
- * @param content
- */
-function updateTodoBox(pk, subject, content) {
-    const els = document.getElementsByClassName('todo-pk')
-    let found;
-    for (let i = 0; i < els.length; i++) {
-        if (els[i].innerText.trim() === pk) {
-            found = els[i];
-            break;
-        }
-    }
-    const todoBoxPosnSelector = `#${found.id.slice(1)}` //remove beginning * char
-    const todoBox = $(todoBoxPosnSelector)
-    todoBox.find('.content_title')[0].innerText = subject
-    todoBox.find('.content-text')[0].innerText = content
-    colorTitle(todoBoxPosnSelector)
-    $(todoBoxPosnSelector).animate({
-        scrollTop: $(todoBoxPosnSelector).height()
-    }, 'slow');
-}
-
 
 /**
  * edit todoEntry
  */
 $(document).on('click', '#edit-todo', function (e) {
+    e.preventDefault()
     const pk = $(editModalSpanSelector)[0].innerText.slice(1)
     const subject = $(editSubjectFieldSelector).val();
     const content = $(editContentFieldSelector).val();
@@ -423,12 +404,22 @@ $(document).on('click', '#edit-todo', function (e) {
         },
         dataType: 'json',
         success: function (data) {
-            $('#edit-todo-modal').find('.close').click()
             console.log(data);
-            // orderContainerId();
-            // toggleButton();
-            updateTodoBox(pk, subject, content)
-            // scroll(to);
+            const els = document.getElementsByClassName(todoBoxPKSelector.slice(1))
+            let found;
+            for (let i = 0; i < els.length; i++) {
+                if (els[i].innerText.trim() === pk) {
+                    found = els[i];
+                    break;
+                }
+            }
+            const todoBoxPositionSelector = `#${found.id.slice(1)}` //remove beginning * char from selector
+            console.log(todoBoxPositionSelector)
+            const todoBox = $(todoBoxPositionSelector)
+            todoBox.find(todoContentTitleSelector)[0].innerText = subject
+            todoBox.find(todoContentTextSelector)[0].innerText = content
+            colorTitle(found.id.slice(1))
+            scroll(found.id.slice(1))
         }
     });
 })
@@ -447,11 +438,12 @@ function validateTodoForm(subject, content, type='create') {
     if (!subject) {
         console.log('empty subject');
         // if there is no empty subject error msg on view then add empty subject error msg
-        if ($(subSel).next()[0].id !== 'error-message') {
-            $("#error-message").fadeOut(function() {
+        if ($(subSel).next()[0].id !== errorMessageSelector.slice(1)) {
+            // always remove error message first if already present
+            $(errorMessageSelector).fadeOut(function () {
                 $(this).remove();
             });
-            $('<div class="text-danger" id="error-message">Please enter a subject!</div>')
+            $(`<div id="${errorMessageSelector.slice(1)}">Please enter a subject!</div>`)
                 .insertAfter($(subSel))
             $(subSel).addClass(errOnInputClassSelector)
             return 1;
@@ -460,8 +452,8 @@ function validateTodoForm(subject, content, type='create') {
         }
     }
     // if subject is not empty and there is no subject error msg on view then clear the error msg
-    else if($(subSel).next()[0].id === 'error-message') {
-        $("#error-message").fadeOut(function() {
+    else if($(subSel).next()[0].id === errorMessageSelector.slice(1)) {
+        $(errorMessageSelector).fadeOut(function () {
             $(this).remove();
         });
         $(subSel).removeClass(errOnInputClassSelector)
@@ -471,10 +463,10 @@ function validateTodoForm(subject, content, type='create') {
         console.log('empty content');
         // if there is no empty content msg on view then add empty content error msg
         if ($(conSel).next().length === 0 ) {
-            $("#error-message").fadeOut(function() {
+            $(errorMessageSelector).fadeOut(function () {
                 $(this).remove();
             });
-            $('<div class="text-danger" id="error-message">Please add content for your todo!</div>')
+            $(`<div id="${errorMessageSelector.slice(1)}">Please add content for your todo!</div>`)
                 .insertAfter($(conSel))
             $(conSel).addClass(errOnInputClassSelector)
             return 1;
@@ -488,7 +480,7 @@ function validateTodoForm(subject, content, type='create') {
     }
     // if content is not empty and there is content error msg on view, then clear the error msg and proceed
     else {
-        $("#error-message").fadeOut(function() {
+        $(errorMessageSelector).fadeOut(function () {
             $(this).remove();
         });
         $(conSel).removeClass(errOnInputClassSelector)
