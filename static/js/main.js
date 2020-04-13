@@ -4,15 +4,21 @@ const searchFieldSelector = '#search'
 const searchSubmitButtonSelector = 'button[name=searchSubmit]'
 const todoListSelector = '.todos'
 const todoBoxSelector = '.todo-box'
+const todoBoxPKSelector = '.todo-pk'
 const csrfInputSelector = 'input[name=csrfmiddlewaretoken]'
-const contentTitleSelector = '.content_title'
+const todoContentTitleSelector = '.content-title'
+const todoContentTextSelector = '.content-text'
 const htmlBodySelector = 'body, html'
 const shiftFormSelector = '#shift-form'
 const shiftFromInputSelector = '#from'
 const shiftToInputSelector = '#to'
 const todoAnimationClassSelector = 'anim'
 const errOnInputClassSelector = 'error-in-input'
+const errorMessageSelector = '#error-message'
 const todoButtonContainerSelector = '.button-container'
+const editSubjectFieldSelector = '#edit-subject'
+const editContentFieldSelector = '#edit-content'
+const editModalSpanSelector = '#editTodoModalLabel span'
 
 // Tooltips Initialization
 $(function () {
@@ -24,8 +30,7 @@ $(function () {
  * @param id
  */
 function colorTitle(id){
-    console.log(id)
-    const el = $(`#${id}`).find(contentTitleSelector)
+    const el = $(`#${id}`).find(todoContentTitleSelector)
     if(!el.hasClass(todoAnimationClassSelector)) {
         el.addClass(todoAnimationClassSelector);
     }
@@ -118,7 +123,7 @@ $(searchFieldSelector).keyup(function (e) {
 $(document).on('click', searchSubmitButtonSelector, function (e) {
     e.preventDefault();
     let text = $(searchFieldSelector).val();
-    let id = $(`${contentTitleSelector}:contains(${text})`).parent().parent().parent().parent().attr('id');
+    let id = $(`${todoContentTitleSelector}:contains(${text})`).parent().parent().parent().parent().attr('id');
     console.log(id)
     $(todoListSelector).children(todoBoxSelector).each(function () {
         $(this).hide(); // "this" is the current element in the loop
@@ -165,48 +170,9 @@ $(document).on('click', '#create', function (e) {
     e.preventDefault();
     let subject = $(subjectSelector).val();
     let content = $(contentSelector).val();
-    if (subject === '') {
-        console.log('empty subject');
-        // if there is no empty subject error msg on view then add empty subject error msg
-        if ($(subjectSelector).next()[0].id !== 'error-message') {
-            $('<div class="text-danger" id="error-message">Please enter a subject!</div>')
-                .insertAfter($(subjectSelector))
-            $(subjectSelector).addClass(errOnInputClassSelector)
-            return;
-        } else { //otherwise leave the empty subject msg and do nothing
-            return
-        }
-    }
-    // if subject is not empty and there is no subject error msg on view then clear the error msg
-    else if($(subjectSelector).next()[0].id === 'error-message') {
-            $("#error-message").fadeOut(function() {
-                $(this).remove();
-            });
-        $(subjectSelector).removeClass(errOnInputClassSelector)
-    }
-    // now if content is empty
-    if (content === '') {
-        console.log('empty content');
-        // if there is no empty content msg on view then add empty content error msg
-        if ($(contentSelector).next().length === 0 ) {
-            $('<div class="text-danger" id="error-message">Please add content for your todo!</div>')
-                .insertAfter($(contentSelector))
-            $(contentSelector).addClass(errOnInputClassSelector)
-            return;
-        } else { //otherwise leave the empty content msg and do nothing
-            return
-        }
-    }
-    // if content is not empty and there is no content error msg on view then clear the error msg
-    else if($(contentSelector).next().length === 0) {
-        //do nothing, just proceed to save todoEntry
-    }
-    // if content is not empty and there is content error msg on view, then clear the error msg and proceed
-    else {
-        $("#error-message").fadeOut(function() {
-                $(this).remove();
-            });
-        $(contentSelector).removeClass(errOnInputClassSelector)
+    const returnValue = validateTodoForm(subject, content)
+    if (returnValue === 1) {
+        return
     }
     $.ajax({
         type: 'POST',
@@ -220,21 +186,23 @@ $(document).on('click', '#create', function (e) {
         success: function (data) {
             console.log(data)
             if (data.message === 'non-unique') {
-                $('<div class="text-danger" id="error-message">Todo with this Element title already exists.</div>')
+                $(`<div id="${errorMessageSelector.slice(1)}">Todo with this Element title already exists.</div>`)
                 .insertAfter($(subjectSelector))
                 $(subjectSelector).addClass(errOnInputClassSelector);
             }
             else {
-                // if everything is ok then create a new todoBox for our brand new todoEntry
                 console.log(data.message);
+                // if everything is ok then create a new todoBox for our brand new todoEntry
                 let ele = $(todoBoxSelector).first().clone();
                 ele.appendTo(todoListSelector);
-                (ele.find('h3.content_title').text(subject));
-                ele.find('.content-pos').text('#'+data.position);
-                ele.find('.content-text').text(content);
+                ele.find(todoContentTitleSelector).text(subject);
+                ele.find(todoBoxPKSelector).text('#'+data.position);
+                ele.find(todoContentTextSelector).text(content);
+                //scroll to new todoEntry just created
                 $(htmlBodySelector).animate({
                     scrollTop: $(htmlBodySelector).height()
                 }, 'slow');
+
                 orderContainerId();
                 toggleButton();
                 colorTitle(data.position);
@@ -245,36 +213,6 @@ $(document).on('click', '#create', function (e) {
         }
     })
 });
-
-/**
- * edit todoEntry
- */
-$(document).on('click', '.edit', function (e) {
-    e.preventDefault();
-    let id = $(this).parent().parent().attr('id');
-    const subject = $(subjectSelector).val()
-    const content = $(contentSelector).val()
-    // $(this).parent().parent().prependTo(todoListSelector);
-    $.ajax({
-        type: 'PUT',
-        url: '/todo-edit',
-        data: {
-            'id': id,
-            'subject': subject,
-            'content': content,
-            'csrfmiddlewaretoken': $(csrfInputSelector).val()
-        },
-        dataType: 'json',
-        success: function (data) {
-            console.log(data);
-            orderContainerId();
-            toggleButton();
-            scroll('1');
-            colorTitle('1');
-        }
-    });
-});
-
 
 /**
  * move todoEntry to top
@@ -389,10 +327,10 @@ $(document).on('click', '.down', function (e) {
 });
 
 /**
- * submits todoEntry form
+ * submits todoEntry form for shifting todoEntry
  * @param e event
  */
-function formSubmit(e) {
+function shiftFormSubmit(e) {
     e.preventDefault();
     let from = parseInt($(shiftFromInputSelector).val());
     let to = parseInt($(shiftToInputSelector).val());
@@ -422,3 +360,130 @@ function formSubmit(e) {
         }
     });
 }
+
+/**
+ * populate edit form with existing data
+ */
+$(document).on('click', '.edit', function (e) {
+    e.preventDefault();
+    const pk = $(this).parent().parent().find(todoBoxPKSelector)[0].innerText.trim()
+    const subject = $(this).parent().parent().find(todoContentTitleSelector)[0].innerHTML
+    const content = $(this).parent().parent().find(todoContentTextSelector)[0].innerHTML
+    const spanElement = $(editModalSpanSelector)
+    let spanContent = spanElement[0].innerText
+    if (spanContent === '#') {
+        spanElement[0].innerText += pk
+    }
+    $(editSubjectFieldSelector).val(subject)
+    $(editContentFieldSelector).val(content)
+})
+
+
+/**
+ * edit todoEntry
+ */
+$(document).on('click', '#edit-todo', function (e) {
+    e.preventDefault()
+    const pk = $(editModalSpanSelector)[0].innerText.slice(1)
+    const subject = $(editSubjectFieldSelector).val();
+    const content = $(editContentFieldSelector).val();
+
+    const returnValue = validateTodoForm(subject, content, 'edit')
+    if (returnValue === 1) {
+        return
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: '/todo-edit',
+        data: {
+            'id': pk,
+            'new_subject': subject,
+            'new_content': content,
+            'csrfmiddlewaretoken': $(csrfInputSelector).val()
+        },
+        dataType: 'json',
+        success: function (data) {
+            console.log(data);
+            const els = document.getElementsByClassName(todoBoxPKSelector.slice(1))
+            let found;
+            for (let i = 0; i < els.length; i++) {
+                if (els[i].innerText.trim() === pk) {
+                    found = els[i];
+                    break;
+                }
+            }
+            const todoBoxPositionSelector = `#${found.id.slice(1)}` //remove beginning * char from selector
+            console.log(todoBoxPositionSelector)
+            const todoBox = $(todoBoxPositionSelector)
+            todoBox.find(todoContentTitleSelector)[0].innerText = subject
+            todoBox.find(todoContentTextSelector)[0].innerText = content
+            colorTitle(found.id.slice(1))
+            scroll(found.id.slice(1))
+        }
+    });
+})
+
+function validateTodoForm(subject, content, type='create') {
+    let subSel
+    let conSel
+    if (type === 'create') {
+        subSel = subjectSelector
+        conSel = contentSelector
+    } else if(type === 'edit') {
+        subSel = editSubjectFieldSelector
+        conSel = editContentFieldSelector
+    }
+
+    if (!subject) {
+        console.log('empty subject');
+        // if there is no empty subject error msg on view then add empty subject error msg
+        if ($(subSel).next()[0].id !== errorMessageSelector.slice(1)) {
+            // always remove error message first if already present
+            $(errorMessageSelector).fadeOut(function () {
+                $(this).remove();
+            });
+            $(`<div id="${errorMessageSelector.slice(1)}">Please enter a subject!</div>`)
+                .insertAfter($(subSel))
+            $(subSel).addClass(errOnInputClassSelector)
+            return 1;
+        } else { //otherwise leave the empty subject msg and do nothing
+            return 1
+        }
+    }
+    // if subject is not empty and there is no subject error msg on view then clear the error msg
+    else if($(subSel).next()[0].id === errorMessageSelector.slice(1)) {
+        $(errorMessageSelector).fadeOut(function () {
+            $(this).remove();
+        });
+        $(subSel).removeClass(errOnInputClassSelector)
+    }
+    // now if content is empty, also at this point we have subject non-empty
+    if (!content) {
+        console.log('empty content');
+        // if there is no empty content msg on view then add empty content error msg
+        if ($(conSel).next().length === 0 ) {
+            $(errorMessageSelector).fadeOut(function () {
+                $(this).remove();
+            });
+            $(`<div id="${errorMessageSelector.slice(1)}">Please add content for your todo!</div>`)
+                .insertAfter($(conSel))
+            $(conSel).addClass(errOnInputClassSelector)
+            return 1;
+        } else { //otherwise leave the empty content msg and do nothing
+            return 1
+        }
+    }
+    // if content is not empty and there is no content error msg on view then clear the error msg
+    else if($(conSel).next().length === 0) {
+        //do nothing, just proceed to save todoEntry
+    }
+    // if content is not empty and there is content error msg on view, then clear the error msg and proceed
+    else {
+        $(errorMessageSelector).fadeOut(function () {
+            $(this).remove();
+        });
+        $(conSel).removeClass(errOnInputClassSelector)
+    }
+}
+

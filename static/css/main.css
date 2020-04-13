@@ -63,9 +63,12 @@ body {
 .content-id-tag {
     padding: 0 10px 0 0;
 }
-.content_title {
+.content-title {
     color:#4285f4;
     margin: 25px 0 7px 0;
+}
+.content-text {
+    font-weight: 500;
 }
 .todo-box {
     background-color:#f6f6f6;
@@ -129,6 +132,7 @@ nav {
 #error-message {
     font-size: 13px;
     font-weight: bold;
+    color: red;
 }
 .error-in-input {
     border-bottom: 2px solid red!important;
@@ -136,12 +140,12 @@ nav {
 .delete {
     position: absolute;
     right: 50px;
-    color: #c81f2a!important;
+    color: #aa1a24 !important;
 }
 .edit {
     position: absolute;
     left: 50px;
-    color: #1e6f80 !important;
+    color: #0d7a3a !important;
 }
 .fas {
     font-size: 18px
@@ -166,9 +170,18 @@ button[type=submit] {
     font-size: large!important;
 }
 .fa-clock {
-    color: #2b1355;
+    color: #461f8a;
 }
-.content-pos {
+.fa-fingerprint {
+    color: #ad5e0b;
+}
+.todo-pk {
     font-weight: bold;
+}
+.content-id-tag {
+    margin-left: -5px;
+}
+.date-created {
+    font-weight: 400;
 }
 

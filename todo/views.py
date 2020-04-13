@@ -152,3 +152,23 @@ def todo_create(request):
                 'message': 'non-unique'
             }
         return JsonResponse(data)
+
+
+def todo_edit(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        subject = request.POST.get('new_subject')
+        content = request.POST.get('new_content')
+        try:
+            todo = Todo.objects.get(id=id)
+            todo.element_title = subject
+            todo.content = content
+            todo.save()
+            data = {
+                'message': 'success'
+            }
+        except Todo.DoesNotExist:
+            data = {
+                'message': 'Requested object with {} does not exist!'.format(id)
+            }
+        return JsonResponse(data)
