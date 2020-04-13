@@ -7,7 +7,7 @@ The project is based on:
 
 ![](Screenshot.png)
 
-### Installation guide
+### Installation guide (Linux Ubuntu)
 Clone the project in your storage and `change directory` to the project
 ```shell script
 git clone https://github.com/kiranparajuli589/Moving-Todo.git
