@@ -144,6 +144,8 @@ def todo_create(request):
             todo.save()
             data = {
                 'message': 'unique',
+                'subject': subject,
+                'content': content,
                 'position': todo.position
             }
         except IntegrityError:
@@ -169,6 +171,6 @@ def todo_edit(request):
             }
         except Todo.DoesNotExist:
             data = {
-                'message': 'Requested object with {} does not exist!'.format(id)
+                'message': 'Requested object with id {} does not exist!'.format(id)
             }
         return JsonResponse(data)
