@@ -5,6 +5,8 @@ The project is based on:
 - simple django api backend is used for database management
 - HTML, CSS, JS, AJAX for UI management
 
+![](Screenshot.png)
+
 ### Installation guide
 Clone the project in your storage and `change directory` to the project
 ```shell script
