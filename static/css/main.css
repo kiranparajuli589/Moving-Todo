@@ -67,6 +67,9 @@ body {
     color:#4285f4;
     margin: 25px 0 7px 0;
 }
+.content-text {
+    font-weight: 500;
+}
 .todo-box {
     background-color:#f6f6f6;
     margin-bottom: 10px;
@@ -168,7 +171,13 @@ button[type=submit] {
 .fa-clock {
     color: #2b1355;
 }
-.content-pos {
+.todo-pk {
     font-weight: bold;
+}
+.content-id-tag {
+    margin-left: -5px;
+}
+.date-created {
+    font-weight: 400;
 }
 

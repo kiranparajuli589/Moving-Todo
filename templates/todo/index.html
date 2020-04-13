@@ -74,7 +74,7 @@
             <input type="number" id="from" placeholder="From">
             <span class="span-2"><i class="fas fa-hand-point-right"></i></span>
             <input type="number" id="to" placeholder="To">
-            <button type="submit" onclick="formSubmit(event)" class="btn btn-primary btn-rounded" id="submit">MOVE</button>
+            <button type="submit" onclick="shiftFormSubmit(event)" class="btn btn-primary btn-rounded" id="submit">MOVE</button>
         </form>
         <!--/.shifter-form-->
 
@@ -89,7 +89,7 @@
                             <div class="left-bar">
                                 <div class="title">
                                     <h3 class="content_title">{{todo.element_title}}</h3>
-                                    <h6 class="date-created">
+                                    <h6 class="date-created" data-toggle="tooltip" title="Created Timestamp">
                                         <i class="fas fa-clock"></i>
                                         {{todo.date_created}}
                                     </h6>
@@ -97,11 +97,11 @@
                                 <div class="row">
                                     <div class="col-md-11">
                                         <div class="content">
-                                            <p class="content-text">{{todo.content}}</p>
+                                            <p class='content-text'>{{todo.content}}</p>
                                         </div>
                                     </div>
                                     <div class="col-md-1 content-id-tag">
-                                        <p data-toggle="tooltip" title="pk in db" class="content-pos">
+                                        <p id='*{{forloop.counter}}' data-toggle="tooltip" title="PK in dB" class="todo-pk">
                                             <i class="fas fa-fingerprint"></i>
                                             {{todo.id}}
                                         </p>
@@ -156,7 +156,8 @@
                             <!-- Material input -->
                             <div class="md-form">
                                 <input type="text" id="subject" class="form-control" placeholder="Subject" required="required"/>
-                                <input type="text" id="content" class="form-control" placeholder="Content" required="required"/>
+                                <textarea class="md-textarea form-control" id="content"
+                                          placeholder="Content Textarea" required="required" rows="2"></textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -176,7 +177,7 @@
                 <form>
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title w-100" id="editTodoModalLabel">Edit Todo</h4>
+                            <h4 class="modal-title w-100" id="editTodoModalLabel">Edit Todo <span>#</span> </h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -185,14 +186,12 @@
                         <div class="modal-body">
                             <!-- Material input -->
                             <div class="md-form">
-                                <input type="text" id="edit-subject" class="form-control" placeholder="Subject"
-                                       required="required"/>
-                                <input type="text" id="edit-content" class="form-control" placeholder="Content"
-                                       required="required"/>
+                                <input type="text" id="edit-subject" class="form-control" required="required"/>
+                                <textarea class="md-textarea form-control" id="edit-content" required="required" rows="2"></textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button id="edit-todo" type="submit" class="btn btn-primary btn-sm">Create</button>
+                            <button id="edit-todo" type="submit" class="btn btn-primary btn-sm">UPDATE</button>
                         </div>
                     </div>
                 </form>
@@ -202,7 +201,7 @@
 
         <script src="{% static 'js/main.js' %}" type="text/javascript"></script>
         <script>
-            let elementsNameArray = {{elements_name_array}};
+            let elementsNameArray = {{ elements_name_array }};
             $("#search").autocomplete({source: elementsNameArray});
         </script>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>

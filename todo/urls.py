@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from .views import index, to_top, to_bottom, to_up, to_down, todo_shift, todo_create
+from .views import *
 
 urlpatterns = [
     path('', index, name='index'),
@@ -26,5 +26,6 @@ urlpatterns = [
     path('todo-down', to_down, name='down'),
     path('todo-shift', todo_shift, name='shifter'),
     path('todo-create', todo_create, name='create'),
+    path('todo-edit', todo_edit, name='edit'),
 
 ]
