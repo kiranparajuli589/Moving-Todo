@@ -29,13 +29,13 @@ const smileyButtonSelector = '.fa-smile'
 
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method))
 }
 
 // Tooltips Initialization
 $(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-});
+    $('[data-toggle="tooltip"]').tooltip()
+})
 
 /**
  * color title of moving todoEntry
@@ -44,7 +44,7 @@ $(function () {
 function colorTitle(id){
     const el = $(`#${id}`).find(todoContentTitleSelector)
     if(!el.hasClass(todoAnimationClassSelector)) {
-        el.addClass(todoAnimationClassSelector);
+        el.addClass(todoAnimationClassSelector)
     }
 }
 
@@ -55,25 +55,25 @@ function colorTitle(id){
 function scroll(id) {
     $(htmlBodySelector).animate({
         scrollTop: $(`#${id}`).offset().top - 700
-    }, 600); //speed//
+    }, 600) //speed//
 }
 
 /**
  * sequentially order todoEntries created so far with ascending ids
  */
 function orderContainerId(){
-    let i=1;
+    let i=1
     $(todoListSelector).children(todoBoxSelector).each(function () {
-        $(this).attr('id', i); // "this" is the current element in the loop
-        i++;
-    });
+        $(this).attr('id', i) // "this" is the current element in the loop
+        i++
+    })
 }
 
 /**
  * shows shifting form
  */
 function showShifter() {
-    $(shiftFormSelector).toggle(500);
+    $(shiftFormSelector).toggle(500)
 }
 
 /**
@@ -81,82 +81,82 @@ function showShifter() {
  * moving todoEntry not needed when there is only one or zero entry
  */
 function toggleButton(){
-    const el = $(todoListSelector);
+    const el = $(todoListSelector)
     const todoBoxCount = $(`${todoListSelector} ${todoBoxSelector}`).length
     if (todoBoxCount === 1) {
-        $(toTopButtonSelector).hide();
-        $(toUpButtonSelector).hide();
-        $(toDownButtonSelector).hide();
-        $(toBottomButtonSelector).hide();
-        $(smileyButtonSelector).show();
+        $(toTopButtonSelector).hide()
+        $(toUpButtonSelector).hide()
+        $(toDownButtonSelector).hide()
+        $(toBottomButtonSelector).hide()
+        $(smileyButtonSelector).show()
     } else if (todoBoxCount === 2) {
-        $(toTopButtonSelector).hide();
-        $(toUpButtonSelector).show();
-        $(toDownButtonSelector).show();
-        $(toUpButtonSelector).first().hide();
-        $(toDownButtonSelector).last().hide();
-        $(toBottomButtonSelector).hide();
-        $(smileyButtonSelector).hide();
+        $(toTopButtonSelector).hide()
+        $(toUpButtonSelector).show()
+        $(toDownButtonSelector).show()
+        $(toUpButtonSelector).first().hide()
+        $(toDownButtonSelector).last().hide()
+        $(toBottomButtonSelector).hide()
+        $(smileyButtonSelector).hide()
     }
     else  {
-        $(toTopButtonSelector).show();
-        $(toUpButtonSelector).show();
-        $(toDownButtonSelector).show();
-        $(toBottomButtonSelector).show();
-        $(toTopButtonSelector).first().hide();
-        $(toUpButtonSelector).first().hide();
-        $(toDownButtonSelector).last().hide();
-        $(toBottomButtonSelector).last().hide();
-        $(smileyButtonSelector).hide();
+        $(toTopButtonSelector).show()
+        $(toUpButtonSelector).show()
+        $(toDownButtonSelector).show()
+        $(toBottomButtonSelector).show()
+        $(toTopButtonSelector).first().hide()
+        $(toUpButtonSelector).first().hide()
+        $(toDownButtonSelector).last().hide()
+        $(toBottomButtonSelector).last().hide()
+        $(smileyButtonSelector).hide()
     }
 }
 
-toggleButton();
-orderContainerId();
+toggleButton()
+orderContainerId()
 
 /**
  * scroll page to the top
  */
 $(document).on('click', '#js-top', function (e) {
-    e.preventDefault();
-    window.scrollTo(0,0);
-});
+    e.preventDefault()
+    window.scrollTo(0,0)
+})
 
 /**
  * disable search submit button when page loaded
  */
-$(searchSubmitButtonSelector).attr('disabled', 'disabled');
+$(searchSubmitButtonSelector).attr('disabled', 'disabled')
 
 /**
  * only enable search submit btn if something has been typed inside search box
  */
 $(searchFieldSelector).keyup(function (e) {
-    let key = e.which;
+    let key = e.which
     if ($(this).val().length !== 0){
-        $(searchSubmitButtonSelector).removeAttr('disabled');
+        $(searchSubmitButtonSelector).removeAttr('disabled')
     }
     else {
-        $(searchSubmitButtonSelector).attr('disabled', 'disabled');
+        $(searchSubmitButtonSelector).attr('disabled', 'disabled')
     }
     if(key === 13) {  // keyboard Enter key code
-        $(searchSubmitButtonSelector).click();
+        $(searchSubmitButtonSelector).click()
     }
-});
+})
 
 /**
  * search submit function
  * shows search result with single todoEntry
  */
 $(document).on('click', searchSubmitButtonSelector, function (e) {
-    e.preventDefault();
-    let text = $(searchFieldSelector).val();
+    e.preventDefault()
+    let text = $(searchFieldSelector).val()
     let id = $(`${todoContentTitleSelector}:contains(${text})`).parent().parent().parent().parent().attr('id');
     console.log(id)
     $(todoListSelector).children(todoBoxSelector).each(function () {
-        $(this).hide(); // "this" is the current element in the loop
-    });
-    $(`#${id}`).show();
-});
+        $(this).hide() // "this" is the current element in the loop
+    })
+    $(`#${id}`).show()
+})
 
 /**
  * search using click on submit buttom
@@ -164,30 +164,30 @@ $(document).on('click', searchSubmitButtonSelector, function (e) {
  * just click anywhere outside search box then voila you're back to list
  */
 $(document).on('blur', searchSubmitButtonSelector, function (e) {
-    e.preventDefault();
+    e.preventDefault()
     $(searchFieldSelector).val("") // also delete searched content from search box
     $(todoListSelector).children(todoBoxSelector).each(function () {
-        $(this).show(); // "this" is the current element in the loop
-    });
-});
+        $(this).show() // "this" is the current element in the loop
+    })
+})
 
 /**
  * search using keyboard pressing Enter key?
  * just get off from search input field using `Tab` then you're back to list
  */
 $(document).on('blur', searchFieldSelector, function (e) {
-    e.preventDefault();
+    e.preventDefault()
     $(todoListSelector).children(todoBoxSelector).each(function () {
-        $(this).show(); // "this" is the current element in the loop
-    });
-});
+        $(this).show() // "this" is the current element in the loop
+    })
+})
 
 /**
  * focuses subject field after clicking on createTodoButton
  */
 $(document).on('click', '#create-todo-btn', function (e) {
-    e.preventDefault();
-    setTimeout(function() { $(subjectSelector).focus() }, 500);
+    e.preventDefault()
+    setTimeout(function() { $(subjectSelector).focus() }, 500)
 })
 
 /**
@@ -220,7 +220,7 @@ $(document).on('click', '#create', function (e) {
                 return
             }
             else {
-                console.log(data.message);
+                console.log(data.message)
                 // if everything is ok then create a new todoBox for our brand new todoEntry
                 let ele = $(todoBoxSelector).first().clone()
                 ele.appendTo(todoListSelector)
@@ -247,9 +247,9 @@ $(document).on('click', '#create', function (e) {
  * move todoEntry to top
  */
 $(document).on('click', '.top', function (e) {
-    e.preventDefault();
-    let id = $(this).parent().parent().attr('id');
-    $(this).parent().parent().prependTo(todoListSelector);
+    e.preventDefault()
+    let id = $(this).parent().parent().attr('id')
+    $(this).parent().parent().prependTo(todoListSelector)
     $.ajax({
         type: 'POST',
         url: '/todo-top',
@@ -259,25 +259,25 @@ $(document).on('click', '.top', function (e) {
         },
         dataType: 'json',
         success: function (data) {
-            console.log(data);
-            orderContainerId();
-            toggleButton();
-            scroll('1');
-            colorTitle('1');
+            console.log(data)
+            orderContainerId()
+            toggleButton()
+            scroll('1')
+            colorTitle('1')
         }
-    });
-});
+    })
+})
 
 /**
  * move todoEntry to bottom
  */
 $(document).on('click', '.bottom', function (e) {
-    e.preventDefault();
-    let id = $(this).parent().parent().attr('id');
-    $(this).parent().parent().appendTo(todoListSelector);
+    e.preventDefault()
+    let id = $(this).parent().parent().attr('id')
+    $(this).parent().parent().appendTo(todoListSelector)
     $(htmlBodySelector).animate({
         scrollTop: $(htmlBodySelector).height()
-    }, 'slow');
+    }, 'slow')
     $.ajax({
         type: 'POST',
         url: '/todo-bottom',
@@ -287,26 +287,26 @@ $(document).on('click', '.bottom', function (e) {
         },
         dataType: 'json',
         success: function (data) {
-            console.log(data);
-            orderContainerId();
-            toggleButton();
-            colorTitle(data.total);
+            console.log(data)
+            orderContainerId()
+            toggleButton()
+            colorTitle(data.total)
         }
-    });
-});
+    })
+})
 
 /**
  * move todoEntry one step up
  */
 $(document).on('click', '.up', function (e) {
-    e.preventDefault();
-    const id = parseInt($(this).parent().parent().attr('id'));
-    const newId = `#${(id - 1).toString()}`;
-    $(this).parent().parent().fadeOut(200);
-    $(newId).fadeOut("slow");
-    $(this).parent().parent().insertBefore(newId);
-    $(newId).fadeIn("slow");
-    $(this).parent().parent().show().fadeIn(200);
+    e.preventDefault()
+    const id = parseInt($(this).parent().parent().attr('id'))
+    const newId = `#${(id - 1).toString()}`
+    $(this).parent().parent().fadeOut(200)
+    $(newId).fadeOut("slow")
+    $(this).parent().parent().insertBefore(newId)
+    $(newId).fadeIn("slow")
+    $(this).parent().parent().show().fadeIn(200)
     $.ajax({
         type: 'POST',
         url: '/todo-up',
@@ -316,28 +316,28 @@ $(document).on('click', '.up', function (e) {
         },
         dataType: 'json',
         success: function (data) {
-            console.log(data);
-            colorTitle(id);
-            orderContainerId();
+            console.log(data)
+            colorTitle(id)
+            orderContainerId()
             toggleButton()
         }
-    });
-});
+    })
+})
 
 /**
  * move todoEntry one step down
  */
 $(document).on('click', '.down', function (e) {
-    e.preventDefault();
-    const id = parseInt($(this).parent().parent().attr('id'));
-    const newId = `#${(id + 1).toString()}`;
-    $(this).parent().parent().fadeOut(200);
-    $(newId).fadeOut("slow");
-    $(this).parent().parent().insertAfter(newId);
-    $(newId).fadeIn("slow");
-    $(this).parent().parent().show().fadeIn(200);
+    e.preventDefault()
+    const id = parseInt($(this).parent().parent().attr('id'))
+    const newId = `#${(id + 1).toString()}`
+    $(this).parent().parent().fadeOut(200)
+    $(newId).fadeOut("slow")
+    $(this).parent().parent().insertAfter(newId)
+    $(newId).fadeIn("slow")
+    $(this).parent().parent().show().fadeIn(200)
 
-    toggleButton();
+    toggleButton()
     $.ajax({
         type: 'POST',
         url: '/todo-down',
@@ -347,22 +347,22 @@ $(document).on('click', '.down', function (e) {
         },
         dataType: 'json',
         success: function (data) {
-            console.log(data);
-            colorTitle(id);
-            orderContainerId();
+            console.log(data)
+            colorTitle(id)
+            orderContainerId()
             toggleButton()
         }
-    });
-});
+    })
+})
 
 /**
  * submits todoEntry form for shifting todoEntry
  * @param e event
  */
 function shiftFormSubmit(e) {
-    e.preventDefault();
-    let from = parseInt($(shiftFromInputSelector).val());
-    let to = parseInt($(shiftToInputSelector).val());
+    e.preventDefault()
+    let from = parseInt($(shiftFromInputSelector).val())
+    let to = parseInt($(shiftToInputSelector).val())
     $.ajax({
         type: 'POST',
         url: '/todo-shift',
@@ -374,27 +374,27 @@ function shiftFormSubmit(e) {
         dataType: 'json',
         success: function (data) {
             if (from > to) {
-                $(shiftFromInputSelector).insertBefore(shiftToInputSelector);
+                $(shiftFromInputSelector).insertBefore(shiftToInputSelector)
             }
             else if (from < to) {
 
-                $(shiftFromInputSelector).insertAfter(shiftToInputSelector);
+                $(shiftFromInputSelector).insertAfter(shiftToInputSelector)
 
             }
-            console.log(data);
-            orderContainerId();
-            toggleButton();
-            colorTitle(to);
-            scroll(to);
+            console.log(data)
+            orderContainerId()
+            toggleButton()
+            colorTitle(to)
+            scroll(to)
         }
-    });
+    })
 }
 
 /**
  * populate edit form with existing data
  */
 $(document).on('click', '.edit', async function (e) {
-    e.preventDefault();
+    e.preventDefault()
     const pk = await $(this).parent().parent().find(todoBoxPKSelector)[0].innerText.trim()
     const subject = await $(this).parent().parent().find(todoContentTitleSelector)[0].innerHTML
     const content = await $(this).parent().parent().find(todoContentTextSelector)[0].innerHTML
@@ -432,7 +432,7 @@ $(document).on('click', '#edit-todo', async function (e) {
     $.ajax({
         beforeSend: function(xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                xhr.setRequestHeader("X-CSRFToken", csrftoken)
             }
         },
         type: 'PATCH',
@@ -444,7 +444,7 @@ $(document).on('click', '#edit-todo', async function (e) {
         },
         dataType: 'json',
         success: function (data) {
-            console.log(data);
+            console.log(data)
             if (data.message === 'non-unique') {
                 $(`<div id="${errorMessageSelector.slice(1)}">Todo with this Element title already exists.</div>`)
                     .insertAfter($(editSubjectFieldSelector))
@@ -452,11 +452,11 @@ $(document).on('click', '#edit-todo', async function (e) {
                 return
             }
             const els = document.getElementsByClassName(todoBoxPKSelector.slice(1))
-            let found;
+            let found
             for (let i = 0; i < els.length; i++) {
                 if (els[i].innerText.trim() === pk) {
-                    found = els[i];
-                    break;
+                    found = els[i]
+                    break
                 }
             }
             const todoBoxPositionSelector = `#${found.id.slice(1)}` //remove beginning * char from selector
@@ -467,7 +467,7 @@ $(document).on('click', '#edit-todo', async function (e) {
             colorTitle(found.id.slice(1))
             scroll(found.id.slice(1))
         }
-    });
+    })
 })
 
 $(document).on('click', '#delete-todo', function (e) {
@@ -479,7 +479,7 @@ $(document).on('click', '#delete-todo', function (e) {
     $.ajax({
         beforeSend: function(xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                xhr.setRequestHeader("X-CSRFToken", csrftoken)
             }
         },
         type: 'DELETE',
@@ -489,12 +489,12 @@ $(document).on('click', '#delete-todo', function (e) {
         },
         dataType: 'json',
         success: async function (data) {
-            console.log(data);
+            console.log(data)
             await $(`#${data.position}`).remove()
             orderContainerId()
             toggleButton()
         }
-    });
+    })
 })
 
 function validateTodoForm(subject, content, type='create') {
@@ -509,17 +509,17 @@ function validateTodoForm(subject, content, type='create') {
     }
 
     if (!subject) {
-        console.log('empty subject');
+        console.log('empty subject')
         // if there is no empty subject error msg on view then add empty subject error msg
         if ($(subSel).next()[0].id !== errorMessageSelector.slice(1)) {
             // always remove error message first if already present
             $(errorMessageSelector).fadeOut(function () {
-                $(this).remove();
-            });
+                $(this).remove()
+            })
             $(`<div id="${errorMessageSelector.slice(1)}">Please enter a subject!</div>`)
                 .insertAfter($(subSel))
             $(subSel).addClass(errOnInputClassSelector)
-            return 1;
+            return 1
         } else { //otherwise leave the empty subject msg and do nothing
             return 1
         }
@@ -527,22 +527,22 @@ function validateTodoForm(subject, content, type='create') {
     // if subject is not empty and there is no subject error msg on view then clear the error msg
     else if($(subSel).next()[0].id === errorMessageSelector.slice(1)) {
         $(errorMessageSelector).fadeOut(function () {
-            $(this).remove();
-        });
+            $(this).remove()
+        })
         $(subSel).removeClass(errOnInputClassSelector)
     }
     // now if content is empty, also at this point we have subject non-empty
     if (!content) {
-        console.log('empty content');
+        console.log('empty content')
         // if there is no empty content msg on view then add empty content error msg
         if ($(conSel).next().length === 0 ) {
             $(errorMessageSelector).fadeOut(function () {
-                $(this).remove();
-            });
+                $(this).remove()
+            })
             $(`<div id="${errorMessageSelector.slice(1)}">Please add content for your todo!</div>`)
                 .insertAfter($(conSel))
             $(conSel).addClass(errOnInputClassSelector)
-            return 1;
+            return 1
         } else { //otherwise leave the empty content msg and do nothing
             return 1
         }
@@ -554,8 +554,8 @@ function validateTodoForm(subject, content, type='create') {
     // if content is not empty and there is content error msg on view, then clear the error msg and proceed
     else {
         $(errorMessageSelector).fadeOut(function () {
-            $(this).remove();
-        });
+            $(this).remove()
+        })
         $(conSel).removeClass(errOnInputClassSelector)
     }
 }
