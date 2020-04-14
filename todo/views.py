@@ -9,6 +9,8 @@ from .models import Todo
 
 
 def index(request):
+    if Todo.objects.count() == 0:
+        Todo.objects.create(position=1, element_title="Sample Todo", content='This is a sample todo!')
     todoEntries = Todo.objects.order_by('position')
     element_names_array = []
     for todo in todoEntries:
