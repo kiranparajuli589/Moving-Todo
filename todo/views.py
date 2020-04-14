@@ -3,6 +3,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db.utils import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.http import QueryDict
 from django.utils.safestring import mark_safe
 from .models import Todo
 
@@ -37,28 +38,36 @@ def to_top(request):
         ts.position = 1
         ts.save()
         data = {
-            'message': 'success'
+            'code': 200,
+            'status': 'Moved to top',
+            'message': 'success',
+            'todo': {
+                'new_position': todo.position,
+                'prev_position': pos
+            }
         }
         return JsonResponse(data)
-        # html = render_to_string('todo/index.html', {'todo_list': Todo.objects.order_by("position")})
-        # return HttpResponse(html)
-        # return render_to_response('todo/index.html', {'todo_list': Todo.objects.order_by("position")})
 
 
 def to_bottom(request):
     if request.method == "POST":
-        pos = request.POST.get('position')
-        t = Todo.objects.filter(position__gt=pos)
-        ts = Todo.objects.get(position=pos)
-        total = Todo.objects.count()
-        for todo in t:
+        position = request.POST.get('position')
+        todoEntries = Todo.objects.filter(position__gt=position)
+        todoSelected = Todo.objects.get(position=position)
+        total_count = Todo.objects.count()
+        for todo in todoEntries:
             todo.position -= 1
             todo.save()
-        ts.position = total
-        ts.save()
+        todoSelected.position = total_count
+        todoSelected.save()
         data = {
+            'code': 200,
+            'status': 'Moved to bottom',
             'message': 'success',
-            'total': total
+            'todo': {
+                'newPosition': todoSelected.position,
+                'prevPosition': position
+            }
         }
         return JsonResponse(data)
 
@@ -143,34 +152,71 @@ def todo_create(request):
             )
             todo.save()
             data = {
-                'message': 'unique',
-                'subject': subject,
-                'content': content,
-                'position': todo.position
+                'code': 201,
+                'status': 'Created',
+                'message': 'Success',
+                'todo': {
+                    'id': todo.id,
+                    'position': todo.position,
+                    'subject': subject,
+                    'content': content,
+                },
             }
         except IntegrityError:
-
             data = {
+                'code': 403,
+                'status': 'Forbidden',
                 'message': 'non-unique'
             }
         return JsonResponse(data)
 
 
-def todo_edit(request):
-    if request.method == 'POST':
-        id = request.POST.get('id')
-        subject = request.POST.get('new_subject')
-        content = request.POST.get('new_content')
+def todo_edit(request, pk):
+    if request.method == 'PATCH':
+        subject = QueryDict(request.body).get('new_subject')
+        content = QueryDict(request.body).get('new_content')
         try:
-            todo = Todo.objects.get(id=id)
+            todo = Todo.objects.get(pk=pk)
             todo.element_title = subject
             todo.content = content
             todo.save()
             data = {
-                'message': 'success'
+                'code': 204,
+                'status': 'OK',
+                'message': 'Edit Success'
             }
         except Todo.DoesNotExist:
             data = {
-                'message': 'Requested object with id {} does not exist!'.format(id)
+                'code': 404,
+                'status': 'Not Found',
+                'message': 'Todo object with id {} does not exist!'.format(id)
+            }
+        except IntegrityError:
+            data = {
+                'code': 403,
+                'status': 'Forbidden',
+                'message': 'non-unique'
+            }
+        return JsonResponse(data)
+
+
+def todo_delete(request, pk):
+    if request.method == 'DELETE':
+        try:
+            print(pk)
+            todo = Todo.objects.get(pk=pk)
+            position = todo.position
+            todo.delete()
+            data = {
+                'code': 200,
+                'status': 'OK',
+                'position': position,
+                'message': 'Delete Success'
+            }
+        except Todo.DoesNotExist:
+            data = {
+                'code': 404,
+                'status': 'Not Found',
+                'message': 'Todo object with id {} does not exist!'.format(id)
             }
         return JsonResponse(data)

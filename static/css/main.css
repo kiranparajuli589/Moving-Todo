@@ -50,9 +50,12 @@ body {
 #show-shifter {
     font-size: 16px;
 }
-.modal-header {
+.primary-modal-header {
     background: #4285f4!important;
     color: white;
+}
+.modal-title {
+    font-weight: 500;
 }
 .button-container {
     display: block;
@@ -66,8 +69,10 @@ body {
 .content-title {
     color:#4285f4;
     margin: 25px 0 7px 0;
+    font-weight: 400;
 }
 .content-text {
+    font-size: medium;
     font-weight: 500;
 }
 .todo-box {
@@ -152,6 +157,9 @@ nav {
 }
 .fa-search {
     font-size: large!important;
+}
+.fa-smile {
+    color: #fd7e14;
 }
 .date-created {
     position: absolute;
