@@ -9,41 +9,35 @@ from .models import Todo
 
 
 def index(request):
-    try:
-        t = Todo.objects.create(position=1,
-                                element_title="Sample Todo 1",
-                                content="This is a sample todo")
-    except IntegrityError:
-        pass
-    todo = Todo.objects.order_by('position')
+    todoEntries = Todo.objects.order_by('position')
     element_names_array = []
-    for t in todo:
-        element_names_array.append(str(t.element_title))
+    for todo in todoEntries:
+        element_names_array.append(str(todo.element_title))
     context = {
         'elements_name_array': mark_safe(json.dumps(list(element_names_array), cls=DjangoJSONEncoder)),
-        'todo_list': todo,
-        'minimum': Todo.objects.count()+1
+        'todo_list': todoEntries,
+        'minimum': Todo.objects.count() + 1
     }
     return render(request, 'todo/index.html', context)
 
 
 def to_top(request):
     if request.method == "POST":
-        pos = request.POST.get('position')
-        t = Todo.objects.filter(position__lt=pos)
-        ts = Todo.objects.get(position=pos)
-        for todo in t:
+        position = request.POST.get('position')
+        todoEntries = Todo.objects.filter(position__lt=position)
+        todoSelected = Todo.objects.get(position=position)
+        for todo in todoEntries:
             todo.position += 1
             todo.save()
-        ts.position = 1
-        ts.save()
+        todoSelected.position = 1
+        todoSelected.save()
         data = {
             'code': 200,
             'status': 'Moved to top',
             'message': 'success',
             'todo': {
-                'new_position': todo.position,
-                'prev_position': pos
+                'new_position': todoSelected.position,
+                'prev_position': position
             }
         }
         return JsonResponse(data)
@@ -74,31 +68,43 @@ def to_bottom(request):
 
 def to_up(request):
     if request.method == "POST":
-        pos = request.POST.get('position')
-        ts = Todo.objects.get(position=pos)
-        ts1 = Todo.objects.get(position=int(pos)-1)
+        position = request.POST.get('position')
+        todoSelected = Todo.objects.get(position=position)
+        targetTodoEntry = Todo.objects.get(position=int(position)-1)
         # swapping position values
-        ts.position, ts1.position = ts1.position, ts.position
-        ts.save()
-        ts1.save()
+        todoSelected.position, targetTodoEntry.position = targetTodoEntry.position, todoSelected.position
+        todoSelected.save()
+        targetTodoEntry.save()
         data = {
-            'message': 'success'
+            'code': 200,
+            'status': 'Moved up',
+            'message': 'success',
+            'todo': {
+                'newPosition': todoSelected.position,
+                'prevPosition': position
+            }
         }
         return JsonResponse(data)
 
 
 def to_down(request):
     if request.method == "POST":
-        pos = request.POST.get('position')
-        print(pos)
-        ts = Todo.objects.get(position=pos)
-        ts1 = Todo.objects.get(position=int(pos)+1)
+        position = request.POST.get('position')
+        print(position)
+        todoSelected = Todo.objects.get(position=position)
+        targetTodoEntry = Todo.objects.get(position=int(position)+1)
         # swapping position values
-        ts.position, ts1.position = ts1.position, ts.position
-        ts.save()
-        ts1.save()
+        todoSelected.position, targetTodoEntry.position = targetTodoEntry.position, todoSelected.position
+        todoSelected.save()
+        targetTodoEntry.save()
         data = {
-            'message': 'success'
+            'code': 200,
+            'status': 'Moved down',
+            'message': 'success',
+            'todo': {
+                'newPosition': todoSelected.position,
+                'prevPosition': position
+            }
         }
         return JsonResponse(data)
 
@@ -108,34 +114,48 @@ def todo_shift(request):
         from_position = request.POST.get('from')
         to_position = request.POST.get('to')
         if int(from_position) < int(to_position):
-            t = Todo.objects.filter(position__gt=from_position, position__lte=to_position)
-            ts = Todo.objects.get(position=from_position)
-            ts.position = None
-            for todo in t:
+            todoEntries = Todo.objects.filter(position__gt=from_position, position__lte=to_position)
+            todoSelected = Todo.objects.get(position=from_position)
+            todoSelected.position = None
+            for todo in todoEntries:
                 todo.position -= 1
                 todo.save()
-            ts.position = to_position
-            ts.save()
+            todoSelected.position = to_position
+            todoSelected.save()
             data = {
-                'message': 'success'
+                'code': 200,
+                'status': 'Todo shifted',
+                'message': 'success',
+                'todo': {
+                    'newPosition': todoSelected.position,
+                    'prevPosition': from_position
+                }
             }
             return JsonResponse(data)
         elif int(from_position) > int(to_position):
-            t = Todo.objects.filter(position__gte=to_position, position__lt=from_position)
-            ts = Todo.objects.get(position=from_position)
-            ts.position = None
-            for todo in t:
+            todoEntries = Todo.objects.filter(position__gte=to_position, position__lt=from_position)
+            todoSelected = Todo.objects.get(position=from_position)
+            todoSelected.position = None
+            for todo in todoEntries:
                 todo.position += 1
                 todo.save()
-            ts.position = to_position
-            ts.save()
+            todoSelected.position = to_position
+            todoSelected.save()
             data = {
-                'message': 'success'
+                'code': 200,
+                'status': 'Todo shifted',
+                'message': 'success',
+                'todo': {
+                    'newPosition': todoSelected.position,
+                    'prevPosition': from_position
+                }
             }
             return JsonResponse(data)
         elif int(from_position) is int(to_position):
             data = {
-                'message': 'equal'
+                'code': 403,
+                'status': 'Forbidden',
+                'message': 'From and To values got same!',
             }
             return JsonResponse(data)
 
@@ -183,7 +203,13 @@ def todo_edit(request, pk):
             data = {
                 'code': 204,
                 'status': 'OK',
-                'message': 'Edit Success'
+                'message': 'Edit Success',
+                'todo': {
+                    'id': todo.id,
+                    'position': todo.position,
+                    'subject': todo.element_title,
+                    'content': todo.content
+                }
             }
         except Todo.DoesNotExist:
             data = {
@@ -210,7 +236,7 @@ def todo_delete(request, pk):
             data = {
                 'code': 200,
                 'status': 'OK',
-                'position': position,
+                'deletedPosition': position,
                 'message': 'Delete Success'
             }
         except Todo.DoesNotExist:
