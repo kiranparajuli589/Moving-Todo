@@ -26,13 +26,19 @@ const toBottomButtonSelector = '.bottom'
 const toDownButtonSelector = '.down'
 const smileyButtonSelector = '.fa-smile'
 
-
+/**
+ * used for PATCH and DELETE methods
+ * @param method
+ * @return {boolean}
+ */
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method))
 }
 
-// Tooltips Initialization
+/**
+ * Tooltips Initialization
+ */
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 })
@@ -81,7 +87,6 @@ function showShifter() {
  * moving todoEntry not needed when there is only one or zero entry
  */
 function toggleButton(){
-    const el = $(todoListSelector)
     const todoBoxCount = $(`${todoListSelector} ${todoBoxSelector}`).length
     if (todoBoxCount === 1) {
         $(toTopButtonSelector).hide()
@@ -237,7 +242,6 @@ $(document).on('click', '#create', function (e) {
             $(subjectSelector).val("")
             $(contentSelector).val("")
         }
-
     })
 })
 
@@ -557,4 +561,3 @@ function validateTodoForm(subject, content, type='create') {
         $(conSel).removeClass(errOnInputClassSelector)
     }
 }
-
