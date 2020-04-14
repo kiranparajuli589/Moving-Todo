@@ -26,5 +26,6 @@ urlpatterns = [
     path('todo-down', to_down, name='down'),
     path('todo-shift', todo_shift, name='shifter'),
     path('todo-create', todo_create, name='create'),
-    path('todo-edit', todo_edit, name='edit'),
+    path('todo-edit/<int:pk>', todo_edit, name='edit'),
+    path('todo-delete/<int:pk>', todo_delete, name='delete'),
 ]

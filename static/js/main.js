@@ -19,6 +19,18 @@ const todoButtonContainerSelector = '.button-container'
 const editSubjectFieldSelector = '#edit-subject'
 const editContentFieldSelector = '#edit-content'
 const editModalSpanSelector = '#editTodoModalLabel span'
+const deleteModalSpanSelector = '#delete-todo-modal span'
+const toTopButtonSelector = '.top'
+const toUpButtonSelector = '.up'
+const toBottomButtonSelector = '.bottom'
+const toDownButtonSelector = '.down'
+const smileyButtonSelector = '.fa-smile'
+
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
 
 // Tooltips Initialization
 $(function () {
@@ -70,17 +82,32 @@ function showShifter() {
  */
 function toggleButton(){
     const el = $(todoListSelector);
-    if ($(`${todoListSelector} ${todoBoxSelector}`).length > 1 ) {
-        el.children().find(".top").show();
-        el.children().find(".up").show();
-        el.children().find(".down").show();
-        el.children().find(".bottom").show();
-        el.children().first().find(".top").hide();
-        el.children().first().find(".up").hide();
-        el.children().last().find(".down").hide();
-        el.children().last().find(".bottom").hide();
-    } else {
-        $(todoButtonContainerSelector).hide()
+    const todoBoxCount = $(`${todoListSelector} ${todoBoxSelector}`).length
+    if (todoBoxCount === 1) {
+        $(toTopButtonSelector).hide();
+        $(toUpButtonSelector).hide();
+        $(toDownButtonSelector).hide();
+        $(toBottomButtonSelector).hide();
+        $(smileyButtonSelector).show();
+    } else if (todoBoxCount === 2) {
+        $(toTopButtonSelector).hide();
+        $(toUpButtonSelector).show();
+        $(toDownButtonSelector).show();
+        $(toUpButtonSelector).first().hide();
+        $(toDownButtonSelector).last().hide();
+        $(toBottomButtonSelector).hide();
+        $(smileyButtonSelector).hide();
+    }
+    else  {
+        $(toTopButtonSelector).show();
+        $(toUpButtonSelector).show();
+        $(toDownButtonSelector).show();
+        $(toBottomButtonSelector).show();
+        $(toTopButtonSelector).first().hide();
+        $(toUpButtonSelector).first().hide();
+        $(toDownButtonSelector).last().hide();
+        $(toBottomButtonSelector).last().hide();
+        $(smileyButtonSelector).hide();
     }
 }
 
@@ -167,13 +194,14 @@ $(document).on('click', '#create-todo-btn', function (e) {
  * create todoEntry
  */
 $(document).on('click', '#create', function (e) {
-    e.preventDefault();
-    let subject = $(subjectSelector).val();
-    let content = $(contentSelector).val();
+    e.preventDefault()
+    let subject = $(subjectSelector).val()
+    let content = $(contentSelector).val()
     const returnValue = validateTodoForm(subject, content)
     if (returnValue === 1) {
         return
     }
+    console.log($(csrfInputSelector).val())
     $.ajax({
         type: 'POST',
         url: '/todo-create',
@@ -188,31 +216,32 @@ $(document).on('click', '#create', function (e) {
             if (data.message === 'non-unique') {
                 $(`<div id="${errorMessageSelector.slice(1)}">Todo with this Element title already exists.</div>`)
                 .insertAfter($(subjectSelector))
-                $(subjectSelector).addClass(errOnInputClassSelector);
+                $(subjectSelector).addClass(errOnInputClassSelector)
+                return
             }
             else {
                 console.log(data.message);
                 // if everything is ok then create a new todoBox for our brand new todoEntry
-                let ele = $(todoBoxSelector).first().clone();
-                ele.appendTo(todoListSelector);
-                ele.find(todoContentTitleSelector).text(subject);
-                ele.find(todoBoxPKSelector).text('#'+data.position);
-                ele.find(todoContentTextSelector).text(content);
+                let ele = $(todoBoxSelector).first().clone()
+                ele.appendTo(todoListSelector)
+                ele.find(todoContentTitleSelector).text(subject)
+                ele.find(todoBoxPKSelector).html(`<i class="fas fa-fingerprint"></i> ${data.id}`)
+                ele.find(todoContentTextSelector).text(content)
                 //scroll to new todoEntry just created
                 $(htmlBodySelector).animate({
                     scrollTop: $(htmlBodySelector).height()
-                }, 'slow');
+                }, 'slow')
 
-                orderContainerId();
-                toggleButton();
-                colorTitle(data.position);
+                orderContainerId()
+                toggleButton()
+                colorTitle(data.position)
                 // clear input fields after successful todoEntry creation
-                $(subjectSelector).val("");
-                $(contentSelector).val("");
+                $(subjectSelector).val("")
+                $(contentSelector).val("")
             }
         }
     })
-});
+})
 
 /**
  * move todoEntry to top
@@ -364,40 +393,51 @@ function shiftFormSubmit(e) {
 /**
  * populate edit form with existing data
  */
-$(document).on('click', '.edit', function (e) {
+$(document).on('click', '.edit', async function (e) {
     e.preventDefault();
-    const pk = $(this).parent().parent().find(todoBoxPKSelector)[0].innerText.trim()
-    const subject = $(this).parent().parent().find(todoContentTitleSelector)[0].innerHTML
-    const content = $(this).parent().parent().find(todoContentTextSelector)[0].innerHTML
-    const spanElement = $(editModalSpanSelector)
-    let spanContent = spanElement[0].innerText
-    if (spanContent === '#') {
-        spanElement[0].innerText += pk
-    }
+    const pk = await $(this).parent().parent().find(todoBoxPKSelector)[0].innerText.trim()
+    const subject = await $(this).parent().parent().find(todoContentTitleSelector)[0].innerHTML
+    const content = await $(this).parent().parent().find(todoContentTextSelector)[0].innerHTML
+    const spanElement = await $(editModalSpanSelector)
+    spanElement[0].innerText = `#${pk}`
     $(editSubjectFieldSelector).val(subject)
     $(editContentFieldSelector).val(content)
 })
 
+/**
+ * which todoEntry you're deleting??
+ * populate delete modal with todoEntry PK
+ */
+$(document).on('click', '.delete', async function (e) {
+    e.preventDefault()
+    const pk = await $(this).parent().parent().find(todoBoxPKSelector)[0].innerText.trim()
+    const spanElement = await $(deleteModalSpanSelector)
+    spanElement[0].innerText = `#${pk}`
+
+})
 
 /**
  * edit todoEntry
  */
-$(document).on('click', '#edit-todo', function (e) {
+$(document).on('click', '#edit-todo', async function (e) {
     e.preventDefault()
-    const pk = $(editModalSpanSelector)[0].innerText.slice(1)
-    const subject = $(editSubjectFieldSelector).val();
-    const content = $(editContentFieldSelector).val();
-
+    const pk = await $(editModalSpanSelector)[0].innerText.slice(1)
+    const subject = $(editSubjectFieldSelector).val()
+    const content = $(editContentFieldSelector).val()
+    const csrftoken = $(csrfInputSelector).val()
     const returnValue = validateTodoForm(subject, content, 'edit')
     if (returnValue === 1) {
         return
     }
-
     $.ajax({
-        type: 'POST',
-        url: '/todo-edit',
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        },
+        type: 'PATCH',
+        url: `/todo-edit/${pk}`,
         data: {
-            'id': pk,
             'new_subject': subject,
             'new_content': content,
             'csrfmiddlewaretoken': $(csrfInputSelector).val()
@@ -405,6 +445,12 @@ $(document).on('click', '#edit-todo', function (e) {
         dataType: 'json',
         success: function (data) {
             console.log(data);
+            if (data.message === 'non-unique') {
+                $(`<div id="${errorMessageSelector.slice(1)}">Todo with this Element title already exists.</div>`)
+                    .insertAfter($(editSubjectFieldSelector))
+                $(editSubjectFieldSelector).addClass(errOnInputClassSelector)
+                return
+            }
             const els = document.getElementsByClassName(todoBoxPKSelector.slice(1))
             let found;
             for (let i = 0; i < els.length; i++) {
@@ -420,6 +466,33 @@ $(document).on('click', '#edit-todo', function (e) {
             todoBox.find(todoContentTextSelector)[0].innerText = content
             colorTitle(found.id.slice(1))
             scroll(found.id.slice(1))
+        }
+    });
+})
+
+$(document).on('click', '#delete-todo', function (e) {
+    e.preventDefault()
+    const pk = $(deleteModalSpanSelector)[0].innerText.slice(1)
+    console.log(pk)
+    const csrftoken = $(csrfInputSelector).val()
+
+    $.ajax({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        },
+        type: 'DELETE',
+        url: `/todo-delete/${pk}`,
+        data: {
+            'csrfmiddlewaretoken': csrftoken
+        },
+        dataType: 'json',
+        success: async function (data) {
+            console.log(data);
+            await $(`#${data.position}`).remove()
+            orderContainerId()
+            toggleButton()
         }
     });
 })

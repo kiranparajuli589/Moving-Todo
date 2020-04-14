@@ -120,14 +120,15 @@
                             <a class="up m-1" data-toggle="tooltip" title="Move Up">
                                 <i class="fas fa-caret-square-up"></i>
                             </a>
+                            <i class="fas fa-smile" data-target="tooltip" title="Smile :)"></i>
                             <a class="down m-1" data-toggle="tooltip" title="Move Down">
                                 <i class="fas fa-caret-square-down"></i>
                             </a>
                             <a class="bottom m-1" data-toggle="tooltip" title="To Bottom">
                                 <i class="fas fa-chevron-circle-down"></i>
                             </a>
-                            <a class="delete m-1" data-toggle="tooltip" title="Delete Todo">
-                                <i class="fas fa-trash"></i>
+                            <a class="delete m-1" data-toggle="modal" data-target="#delete-todo-modal">
+                                <i class="fas fa-trash" data-toggle="tooltip" title="Delete Todo"></i>
                             </a>
                         </div>
                     </div>
@@ -145,7 +146,7 @@
             <div class="modal-dialog modal-sm" role="document">
                 <form>
                     <div class="modal-content">
-                        <div class="modal-header">
+                        <div class="modal-header primary-modal-header">
                             <h4 class="modal-title w-100" id="myModalLabel">Create Todo</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -176,8 +177,8 @@
             <div class="modal-dialog modal-sm" role="document">
                 <form>
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title w-100" id="editTodoModalLabel">Edit Todo <span>#</span> </h4>
+                        <div class="modal-header primary-modal-header">
+                            <h4 class="modal-title w-100" id="editTodoModalLabel">Edit Todo <span></span> </h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -198,6 +199,37 @@
             </div>
         </div>
         <!--/.Edit TodoEntry Modal -->
+
+        <!-- Are you sure to Delete -->
+        <div class="modal fade" id="delete-todo-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-notify modal-danger modal-sm" role="document">
+                <div class="modal-content">
+                    <form method="delete"> {%csrf_token%}
+                        <div class="modal-header">
+                            <h4 class="modal-title heading lead" id="deleteTodoModalLabel">Delete todo <span></span>?</h4>
+
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="text-center">
+                                <i class="fas fa-trash-alt mb-3 animated rotateIn"></i>
+                                <h4>Are you sure you want to delete?</h4>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer justify-content-center">
+                            <button class="btn btn-outline-danger waves-effect" data-dismiss="modal">NO</button>
+                            <button type="submit" id="delete-todo" class="btn btn-danger" data-dismiss="modal">DELETE</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /.Are you sure to Delete-->
 
         <script src="{% static 'js/main.js' %}" type="text/javascript"></script>
         <script>
