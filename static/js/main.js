@@ -39,7 +39,7 @@ function csrfSafeMethod(method) {
 /**
  * Tooltips Initialization
  */
-$(function () {
+$(() => {
     $('[data-toggle="tooltip"]').tooltip()
 })
 
@@ -47,9 +47,9 @@ $(function () {
  * color title of moving todoEntry
  * @param id
  */
-function colorTitle(id){
+function colorTitle(id) {
     const el = $(`#${id}`).find(todoContentTitleSelector)
-    if(!el.hasClass(todoAnimationClassSelector)) {
+    if (!el.hasClass(todoAnimationClassSelector)) {
         el.addClass(todoAnimationClassSelector)
     }
 }
@@ -67,8 +67,8 @@ function scroll(id) {
 /**
  * sequentially order todoEntries created so far with ascending ids
  */
-function orderContainerId(){
-    let i=1
+function orderContainerId() {
+    let i = 1
     $(todoListSelector).children(todoBoxSelector).each(function () {
         $(this).attr('id', i) // "this" is the current element in the loop
         i++
@@ -86,7 +86,7 @@ function showShifter() {
  * checks todoBoxes and manages button container for them
  * moving todoEntry not needed when there is only one or zero entry
  */
-function toggleButton(){
+function toggleButton() {
     const todoBoxCount = $(`${todoListSelector} ${todoBoxSelector}`).length
     if (todoBoxCount === 1) {
         $(toTopButtonSelector).hide()
@@ -102,8 +102,7 @@ function toggleButton(){
         $(toDownButtonSelector).last().hide()
         $(toBottomButtonSelector).hide()
         $(smileyButtonSelector).hide()
-    }
-    else  {
+    } else {
         $(toTopButtonSelector).show()
         $(toUpButtonSelector).show()
         $(toDownButtonSelector).show()
@@ -124,7 +123,7 @@ orderContainerId()
  */
 $(document).on('click', '#js-top', function (e) {
     e.preventDefault()
-    window.scrollTo(0,0)
+    window.scrollTo(0, 0)
 })
 
 /**
@@ -137,13 +136,12 @@ $(searchSubmitButtonSelector).attr('disabled', 'disabled')
  */
 $(searchFieldSelector).keyup(function (e) {
     let key = e.which
-    if ($(this).val().length !== 0){
+    if ($(this).val().length !== 0) {
         $(searchSubmitButtonSelector).removeAttr('disabled')
-    }
-    else {
+    } else {
         $(searchSubmitButtonSelector).attr('disabled', 'disabled')
     }
-    if(key === 13) {  // keyboard Enter key code
+    if (key === 13) {  // keyboard Enter key code
         $(searchSubmitButtonSelector).click()
     }
 })
@@ -156,7 +154,6 @@ $(document).on('click', searchSubmitButtonSelector, function (e) {
     e.preventDefault()
     let text = $(searchFieldSelector).val()
     let id = $(`${todoContentTitleSelector}:contains(${text})`).parent().parent().parent().parent().attr('id');
-    console.log(id)
     $(todoListSelector).children(todoBoxSelector).each(function () {
         $(this).hide() // "this" is the current element in the loop
     })
@@ -164,7 +161,7 @@ $(document).on('click', searchSubmitButtonSelector, function (e) {
 })
 
 /**
- * search using click on submit buttom
+ * search using click on submit button
  * how to get back from search result? quite easy...
  * just click anywhere outside search box then voila you're back to list
  */
@@ -192,7 +189,9 @@ $(document).on('blur', searchFieldSelector, function (e) {
  */
 $(document).on('click', '#create-todo-btn', function (e) {
     e.preventDefault()
-    setTimeout(function() { $(subjectSelector).focus() }, 500)
+    setTimeout(function () {
+        $(subjectSelector).focus()
+    }, 500)
 })
 
 /**
@@ -219,7 +218,7 @@ $(document).on('click', '#create', function (e) {
             if (data.message === 'non-unique') {
                 console.log(data)
                 $(`<div id="${errorMessageSelector.slice(1)}">Todo with this Element title already exists.</div>`)
-                .insertAfter($(subjectSelector))
+                    .insertAfter($(subjectSelector))
                 $(subjectSelector).addClass(errOnInputClassSelector)
                 return
             }
@@ -375,15 +374,18 @@ function shiftFormSubmit(e) {
         },
         dataType: 'json',
         success: function (data) {
-            if (from > to) {
-                $(shiftFromInputSelector).insertBefore(shiftToInputSelector)
-            }
-            else if (from < to) {
-
-                $(shiftFromInputSelector).insertAfter(shiftToInputSelector)
-
-            }
             console.log(data)
+            if (data.code === 200) {
+                if (from > to) {
+                    $(`#${from}`).insertBefore(`#${to}`)
+                } else if (from < to) {
+
+                    $(`#${from}`).insertAfter(`#${to}`)
+
+                }
+            } else if (data.code === 403) {
+                return
+            }
             orderContainerId()
             toggleButton()
             colorTitle(to)
@@ -432,7 +434,7 @@ $(document).on('click', '#edit-todo', async function (e) {
         return
     }
     $.ajax({
-        beforeSend: function(xhr, settings) {
+        beforeSend: function (xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
                 xhr.setRequestHeader("X-CSRFToken", csrftoken)
             }
@@ -475,11 +477,10 @@ $(document).on('click', '#edit-todo', async function (e) {
 $(document).on('click', '#delete-todo', function (e) {
     e.preventDefault()
     const pk = $(deleteModalSpanSelector)[0].innerText.slice(1)
-    console.log(pk)
     const csrftoken = $(csrfInputSelector).val()
 
     $.ajax({
-        beforeSend: function(xhr, settings) {
+        beforeSend: function (xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
                 xhr.setRequestHeader("X-CSRFToken", csrftoken)
             }
@@ -492,20 +493,20 @@ $(document).on('click', '#delete-todo', function (e) {
         dataType: 'json',
         success: async function (data) {
             console.log(data)
-            await $(`#${data.position}`).remove()
+            await $(`#${data.deletedPosition}`).remove()
             orderContainerId()
             toggleButton()
         }
     })
 })
 
-function validateTodoForm(subject, content, type='create') {
+function validateTodoForm(subject, content, type = 'create') {
     let subSel
     let conSel
     if (type === 'create') {
         subSel = subjectSelector
         conSel = contentSelector
-    } else if(type === 'edit') {
+    } else if (type === 'edit') {
         subSel = editSubjectFieldSelector
         conSel = editContentFieldSelector
     }
@@ -527,7 +528,7 @@ function validateTodoForm(subject, content, type='create') {
         }
     }
     // if subject is not empty and there is no subject error msg on view then clear the error msg
-    else if($(subSel).next()[0].id === errorMessageSelector.slice(1)) {
+    else if ($(subSel).next()[0].id === errorMessageSelector.slice(1)) {
         $(errorMessageSelector).fadeOut(function () {
             $(this).remove()
         })
@@ -537,7 +538,7 @@ function validateTodoForm(subject, content, type='create') {
     if (!content) {
         console.log('empty content')
         // if there is no empty content msg on view then add empty content error msg
-        if ($(conSel).next().length === 0 ) {
+        if ($(conSel).next().length === 0) {
             $(errorMessageSelector).fadeOut(function () {
                 $(this).remove()
             })
@@ -550,7 +551,7 @@ function validateTodoForm(subject, content, type='create') {
         }
     }
     // if content is not empty and there is no content error msg on view then clear the error msg
-    else if($(conSel).next().length === 0) {
+    else if ($(conSel).next().length === 0) {
         //do nothing, just proceed to save todoEntry
     }
     // if content is not empty and there is content error msg on view, then clear the error msg and proceed
