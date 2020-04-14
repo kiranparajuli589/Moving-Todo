@@ -201,7 +201,6 @@ $(document).on('click', '#create', function (e) {
     if (returnValue === 1) {
         return
     }
-    console.log($(csrfInputSelector).val())
     $.ajax({
         type: 'POST',
         url: '/todo-create',
@@ -212,34 +211,33 @@ $(document).on('click', '#create', function (e) {
         },
         dataType: 'json',
         success: function (data) {
-            console.log(data)
             if (data.message === 'non-unique') {
+                console.log(data)
                 $(`<div id="${errorMessageSelector.slice(1)}">Todo with this Element title already exists.</div>`)
                 .insertAfter($(subjectSelector))
                 $(subjectSelector).addClass(errOnInputClassSelector)
                 return
             }
-            else {
-                console.log(data.message)
-                // if everything is ok then create a new todoBox for our brand new todoEntry
-                let ele = $(todoBoxSelector).first().clone()
-                ele.appendTo(todoListSelector)
-                ele.find(todoContentTitleSelector).text(subject)
-                ele.find(todoBoxPKSelector).html(`<i class="fas fa-fingerprint"></i> ${data.id}`)
-                ele.find(todoContentTextSelector).text(content)
-                //scroll to new todoEntry just created
-                $(htmlBodySelector).animate({
-                    scrollTop: $(htmlBodySelector).height()
-                }, 'slow')
+            console.log(data.todo)
+            // if everything is ok then create a new todoBox for our brand new todoEntry
+            let ele = $(todoBoxSelector).first().clone()
+            ele.appendTo(todoListSelector)
+            ele.find(todoContentTitleSelector).text(subject)
+            ele.find(todoBoxPKSelector).html(`<i class="fas fa-fingerprint"></i> ${data.todo.id}`)
+            ele.find(todoContentTextSelector).text(content)
+            //scroll to new todoEntry just created
+            $(htmlBodySelector).animate({
+                scrollTop: $(htmlBodySelector).height()
+            }, 'slow')
 
-                orderContainerId()
-                toggleButton()
-                colorTitle(data.position)
-                // clear input fields after successful todoEntry creation
-                $(subjectSelector).val("")
-                $(contentSelector).val("")
-            }
+            orderContainerId()
+            toggleButton()
+            colorTitle(data.todo.position)
+            // clear input fields after successful todoEntry creation
+            $(subjectSelector).val("")
+            $(contentSelector).val("")
         }
+
     })
 })
 
@@ -290,7 +288,7 @@ $(document).on('click', '.bottom', function (e) {
             console.log(data)
             orderContainerId()
             toggleButton()
-            colorTitle(data.total)
+            colorTitle(data.todo.newPosition)
         }
     })
 })
