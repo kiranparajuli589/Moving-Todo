@@ -1,22 +1,30 @@
-dist: bionic
 language: python
 
 python:
-  - "3.7"
+  - "3.8"
+
+node_js:
+  - "14.17.1"
+
+addons:
+  chrome: stable
 
 services:
   - docker
 
 before_install:
+  - docker pull selenium/standalone-chrome-debug
   - docker run -d -p 4444:4444 -p 5900:5900 -v /dev/shm:/dev/shm selenium/standalone-chrome-debug
+  - docker ps -a
 
 before_script:
-  - pip install -r requirements.txt
-  - python3 manage.py migrate
-  - python3 manage.py runserver 172.17.0.1:8000&
-  - npm install
+  - make install
+  - make migrate
+  - make serve &
+  - until curl -s http://172.17.0.1:8000; do sleep 5; done
 
-script: npm test test/acceptance/features/
+script:
+  - yarn test test/acceptance/features/
 
 cache:
   - pip
