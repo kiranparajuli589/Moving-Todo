@@ -33,3 +33,7 @@ clean-migrations:
 	rm -rf todo/migrations
 
 clean: clean-db clean-migrations
+
+lint:
+	black .
+	isort .
