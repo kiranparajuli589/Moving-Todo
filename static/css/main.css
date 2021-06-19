@@ -13,9 +13,16 @@ html {
 }
 
 .todo-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+   position: relative;
+    height: 60px;
+}
+
+#add-todo {
+    height: 40px;
+    width: 40px;
+    color: white;
+    border-radius: 50% !important;
+    margin: 0 10px;
 }
 
 .bounce {
@@ -189,18 +196,15 @@ button[name="searchSubmit"] {
 
 nav {
     padding: 10px;
+    display: flex;
+    align-items: center;
 }
 
 .navbar-brand {
     margin: 0;
-    padding: 0 20px;
+    padding: 0;
     font-size: 24px;
     font-weight: 400;
-}
-
-.nav-button {
-    margin: 0;
-
 }
 
 #error-message {

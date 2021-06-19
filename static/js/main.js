@@ -37,13 +37,6 @@ function csrfSafeMethod(method) {
 }
 
 /**
- * Tooltips Initialization
- */
-$(() => {
-    $('[data-toggle="tooltip"]').tooltip()
-})
-
-/**
  * color title of moving todoEntry
  * @param id
  */
@@ -114,6 +107,13 @@ function toggleButton() {
         $(smileyButtonSelector).hide()
     }
 }
+
+/**
+ * Initializations
+ */
+$(document).on("ready", () => {
+    $('[data-toggle="tooltip"]').tooltip()
+})
 
 toggleButton()
 orderContainerId()
