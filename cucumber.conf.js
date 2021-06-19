@@ -13,15 +13,16 @@ const {
 } = require("nightwatch-api");
 const axios = require("axios").default;
 
-setDefaultTimeout(80000);
+setDefaultTimeout(60000);
 const availableBrowsers = ["chrome", "firefox", "ie"];
 
 const browser = process.env.BROWSER || "chrome";
 if (!availableBrowsers.includes(browser)) {
   throw new Error(
-    `\nInvalid browser selected.\nAvailable browsers: ${availableBrowsers.join(
-      ", "
-    )}\n`
+    "\nInvalid browser selected.\n" +
+      "Available browsers: " +
+      availableBrowsers.join(", ") +
+      "\n"
   );
 }
 
