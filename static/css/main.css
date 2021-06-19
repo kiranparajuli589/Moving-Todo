@@ -1,92 +1,142 @@
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.container {
+    margin: 20px auto;
+}
+
+.todo-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .bounce {
-    margin-top:20px;
-    text-align:center;
+    margin-top: 20px;
+    text-align: center;
 }
+
 body {
     background-color: #c0c0c0;
     zoom: 90%;
 }
-.modal-open{
-    zoom:100%;
+
+.modal-open {
+    zoom: 100%;
     transition: zoom 4s ease !important;
 }
 
-.input-error{
-    border-bottom: 2px solid red!important;
+.input-error {
+    border-bottom: 2px solid red !important;
 }
+
 #js-top {
-    position: fixed!important;
+    position: fixed !important;
     right: 10px;
     bottom: 10px;
     border-radius: 35px;
     padding: 14px 15px 14px 15px;
 }
+
 #js-top i {
     font-size: x-large;
 }
 
-@keyframes todoSubjectAnim
-{
-    0%      {color:black;}
-    25%     {color:red;}
-    75%     {color:red;}
-    100%    {color:black;}
+@keyframes todoSubjectAnim {
+    0% {
+        color: black;
+    }
+    25% {
+        color: red;
+    }
+    75% {
+        color: red;
+    }
+    100% {
+        color: black;
+    }
 }
+
 @-webkit-keyframes todoSubjectAnim /* Safari and Chrome */
 {
-    0%      {color:black;}
-    25%     {color:red;}
-    75%     {color:red;}
-    100%    {color:black;}
+    0% {
+        color: black;
+    }
+    25% {
+        color: red;
+    }
+    75% {
+        color: red;
+    }
+    100% {
+        color: black;
+    }
 }
+
 .anim {
-    animation:todoSubjectAnim 3s 1;
-    -webkit-animation:todoSubjectAnim 3s 1; /* Safari and Chrome */
+    animation: todoSubjectAnim 3s 1;
+    -webkit-animation: todoSubjectAnim 3s 1; /* Safari and Chrome */
 }
 
 #show-shifter {
     font-size: 16px;
+    width: 96%;
 }
+
 .primary-modal-header {
-    background: #4285f4!important;
+    background: #4285f4 !important;
     color: white;
 }
+
 .modal-title {
     font-weight: 500;
 }
+
 .button-container {
     display: block;
     text-align: center;
-    margin:-10px 0 0px 0;
+    margin: -10px 0 0px 0;
     padding-bottom: 5px
 }
+
 .content-id-tag {
     padding: 0 10px 0 0;
 }
+
 .content-title {
-    color:#4285f4;
+    color: #4285f4;
     margin: 25px 0 7px 0;
     font-weight: 400;
 }
+
 .content-text {
     font-size: medium;
     font-weight: 500;
 }
+
 .todo-box {
-    background-color:#f6f6f6;
+    background-color: #f6f6f6;
     margin-bottom: 10px;
 }
+
 #shift-form {
     text-align: center;
-    display: none
+    display: none;
+    margin-top: 20px;
 }
+
 .span-1 {
     font-size: 18px;
     font-weight: 500;
 }
+
 #from {
     margin: 10px 0 0 20px;
     width: 105px;
@@ -94,101 +144,131 @@ body {
     border-radius: 5px;
     padding: 5px;
 }
+
 .span-2 {
     margin: 0 20px 0 20px;
     font-size: 18px;
     font-weight: 450;
 }
+
 #to {
     width: 105px;
     border: 2px solid #33b5e58f;
     border-radius: 5px;
     padding: 5px;
 }
+
 #submit {
     font-size: 20px;
     padding: 12px 32px;
 }
+
 #search {
     border: 1px solid #4599dd;
     border-radius: 6px;
     padding: 10px;
-    margin-top: 50px;
+    width: 80%;
 }
+
+.todo-gif {
+    display: flex;
+    justify-content: center;
+}
+.todo-gif img {
+    margin: 5px;
+}
+
 .search-form {
     text-align: center;
 }
+
 button[name="searchSubmit"] {
     border-radius: 22px;
     padding: 13px 14px 13px 14px;
 }
+
 nav {
     padding: 10px;
 }
+
 .navbar-brand {
-    font-size: 26px;
-    font-weight: bold;
+    margin: 0;
+    padding: 0 20px;
+    font-size: 24px;
+    font-weight: 400;
 }
-.nav-button  {
-    margin:0;
-    padding: 15px 17px;
-    border-radius: 26px;
+
+.nav-button {
+    margin: 0;
+
 }
+
 #error-message {
     font-size: 13px;
     font-weight: bold;
     color: red;
 }
+
 .error-in-input {
-    border-bottom: 2px solid red!important;
+    border-bottom: 2px solid red !important;
 }
+
 .delete {
     position: absolute;
     right: 50px;
     color: #aa1a24 !important;
 }
+
 .edit {
     position: absolute;
     left: 50px;
     color: #0d7a3a !important;
 }
+
 .fas {
     font-size: 18px
 }
+
 .fa-search {
-    font-size: large!important;
+    font-size: large !important;
 }
+
 .fa-smile {
     color: #fd7e14;
 }
+
 .date-created {
     position: absolute;
     right: 50px;
     margin-top: -40px;
 }
-.search-box {
-    margin-top: 70px;
-}
+
 .left-bar {
     border-left: 3px solid #4285f4;
     padding-left: 30px;
     margin-left: 20px;
 }
+
 button[type=submit] {
-    font-size: large!important;
+    font-size: large !important;
 }
+
 .fa-clock {
     color: #461f8a;
 }
+
 .fa-fingerprint {
     color: #ad5e0b;
 }
+
 .todo-pk {
     font-weight: bold;
 }
+
 .content-id-tag {
     margin-left: -5px;
 }
+
 .date-created {
     font-weight: 400;
 }

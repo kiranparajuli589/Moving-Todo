@@ -15,7 +15,7 @@ serve:
 	python manage.py runserver $(ADDRESS)
 
 make-migrations:
-	python manage.py makemigrations $(APP)
+	python manage.py makemigrations todo
 
 migrate:
 	python manage.py migrate
@@ -25,3 +25,11 @@ create-admin:
 	python manage.py createsuperuser \
  		--username $(ADMIN_USERNAME) \
 		--email $(ADMIN_EMAIL) --noinput
+
+clean-db:
+	rm -rf db.sqlite3
+
+clean-migrations:
+	rm -rf todo/migrations
+
+clean: clean-db clean-migrations
