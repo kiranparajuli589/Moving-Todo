@@ -22,6 +22,7 @@ Feature: createTodo
     When the user tries to create a blank todo
     Then an error with subject error message "Please enter a subject!" should be visible below subject field
 
+  @skip @issue-clean-db
   Scenario: user should not be able to create a todo with already existing subject
     Given a todo with subject "subject" is already created
     When the user tries to create a todo entering already existing subject "subject" and content "new content"

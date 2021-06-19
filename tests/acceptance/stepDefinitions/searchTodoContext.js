@@ -1,4 +1,4 @@
-const { Given, When, Then } = require('cucumber');
+const { When, Then } = require('cucumber');
 const { client } = require('nightwatch-api');
 const assert = require('assert');
 
