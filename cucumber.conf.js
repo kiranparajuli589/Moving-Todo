@@ -13,7 +13,7 @@ const {
 } = require("nightwatch-api");
 const axios = require("axios").default;
 
-setDefaultTimeout(60000);
+setDefaultTimeout(80000);
 const availableBrowsers = ["chrome", "firefox", "ie"];
 
 const browser = process.env.BROWSER || "chrome";
