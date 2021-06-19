@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "Simple todo app where you can move you todo up and down :)",
   "scripts": {
+    "lint": "yarn prettier --write .",
     "test:e2e": "cucumber-js --require cucumber.conf.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty",
-    "test:e2e:ci": "cucumber-js --retry 0 --require cucumber.conf.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty",
+    "test:e2e:ci": "cucumber-js --retry 1 --require cucumber.conf.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty",
     "test:ci": "yarn test:e2e:ci tests/acceptance/features -t 'not @skip'"
   },
   "repository": {
