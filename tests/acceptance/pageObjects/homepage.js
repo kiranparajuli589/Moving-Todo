@@ -77,7 +77,7 @@ module.exports = {
         .waitForElementVisible("@modalDiv")
         .setValue("@subjectField", subject)
         .setValue("@contentField", content)
-        .click("@createButton")
+        .click("@createButton");
     },
     errorMessageForUniqueSubjectIsVisible(callback) {
       return this.waitForElementVisible("@errorMessageCss").getText(
