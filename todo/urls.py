@@ -28,4 +28,5 @@ urlpatterns = [
     path('todo-create', todo_create, name='create'),
     path('todo-edit/<int:pk>', todo_edit, name='edit'),
     path('todo-delete/<int:pk>', todo_delete, name='delete'),
+    path('clean-todo', clean_todos, name='delete-all'),
 ]

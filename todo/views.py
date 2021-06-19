@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.http import QueryDict
 from django.utils.safestring import mark_safe
 from .models import Todo
+from django.views.decorators.csrf import csrf_exempt
 
 
 def index(request):
@@ -231,7 +232,6 @@ def todo_edit(request, pk):
 def todo_delete(request, pk):
     if request.method == 'DELETE':
         try:
-            print(pk)
             todo = Todo.objects.get(pk=pk)
             position = todo.position
             todo.delete()
@@ -248,3 +248,14 @@ def todo_delete(request, pk):
                 'message': 'Todo object with id {} does not exist!'.format(id)
             }
         return JsonResponse(data)
+
+@csrf_exempt
+def clean_todos(request):
+    if request.method == 'DELETE':
+        todos = Todo.objects.all()
+        for todo in todos:
+            todo.delete()
+        return JsonResponse({
+            "code": 204,
+            "status": "OK"
+        })
