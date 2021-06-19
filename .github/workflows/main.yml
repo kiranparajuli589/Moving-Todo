@@ -23,9 +23,6 @@ jobs:
       - name: yarn-install
         run: yarn install
 
-      - name: check-java
-        run: java --version
-
       - name: pip-install
         run: pip install -r requirements.txt
 

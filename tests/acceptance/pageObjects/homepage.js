@@ -78,7 +78,6 @@ module.exports = {
         .setValue("@subjectField", subject)
         .setValue("@contentField", content)
         .click("@createButton")
-        .click("@closeBtn");
     },
     errorMessageForUniqueSubjectIsVisible(callback) {
       return this.waitForElementVisible("@errorMessageCss").getText(
