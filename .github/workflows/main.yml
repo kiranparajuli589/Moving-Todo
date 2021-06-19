@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
   workflow_dispatch:
 
@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        browser: [ "chrome", "firefox" ]
+        browser: ["chrome", "firefox"]
 
     steps:
       - uses: actions/checkout@v2
