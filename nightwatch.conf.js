@@ -1,19 +1,52 @@
 module.exports = {
-    src_folders: ['test'],
-    page_objects_path: './test/acceptance/pageObjects',
+    src_folders: ["tests"],
+    // custom_commands_path: ["test/custom_commands"],
+    page_objects_path: './tests/acceptance/pageObjects',
+
     test_settings: {
         default: {
-            selenium_host: '127.0.0.1',
-            launch_url: 'http://172.17.0.1:8000',
-            globals: {},
+            launch_url: 'http://localhost:8000'
+        },
+        selenium: {
+            selenium: {
+                start_process: true,
+                server_path: './selenium/server-3.141.59.jar',
+                port: 4444,
+                cli_args: {
+                    'webdriver.gecko.driver': require('geckodriver').path,
+                    'webdriver.chrome.driver': require('chromedriver').path,
+                    'webdriver.ie.driver': process.platform === 'win32' ? require('iedriver').path : ''
+                }
+            },
+            webdriver: {
+                start_process: false
+            }
+        },
+
+        chrome: {
+            extends: 'selenium',
             desiredCapabilities: {
                 browserName: 'chrome',
-                javascriptEnabled: true,
-                chromeOptions: {
-                    args: ['disable-gpu'],
+                chromeOptions : {
+                    args: ['--headless', '--no-sandbox', '--disable-gpu'],
                     w3c: false
                 }
             }
+        },
+
+        firefox: {
+            extends: 'selenium',
+            desiredCapabilities: {
+                browserName: 'firefox'
+            }
+        },
+
+        ie: {
+            extends: 'selenium',
+            desiredCapabilities: {
+                browserName: 'internet explorer'
+            }
         }
     }
-};
+}
+

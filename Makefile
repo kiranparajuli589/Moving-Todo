@@ -1,4 +1,4 @@
-ADDRESS:=127.0.0.1:8000
+ADDRESS:=localhost:8000
 ADMIN_PASSWORD:=admin
 ADMIN_USERNAME:=admin
 ADMIN_EMAIL:=admin@test.com
