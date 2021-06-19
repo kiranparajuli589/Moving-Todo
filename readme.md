@@ -42,7 +42,7 @@ make migrate
 #### Create super user
 
 ```shell script
-make admin
+make create-admin
 ```
 
 #### Serve
