@@ -10,7 +10,7 @@ module.exports = {
         selenium: {
             selenium: {
                 start_process: true,
-                server_path: './selenium/server-3.141.59.jar',
+                server_path: require('selenium-server').path,
                 port: 4444,
                 cli_args: {
                     'webdriver.gecko.driver': require('geckodriver').path,
@@ -37,7 +37,10 @@ module.exports = {
         firefox: {
             extends: 'selenium',
             desiredCapabilities: {
-                browserName: 'firefox'
+                browserName: 'firefox',
+                "moz:firefoxOptions": {
+                    "args": ["--headless"]
+                }
             }
         },
 
