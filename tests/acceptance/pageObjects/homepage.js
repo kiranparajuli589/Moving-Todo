@@ -42,7 +42,6 @@ module.exports = {
                 .waitForElementVisible('@modalDiv')
                 .setValue('@contentField', content)
                 .click('@createButton')
-                .click('@closeBtn')
         },
         subjectErrorMessageVisibleBelowSubjectField(callback){
             return this.waitForElementVisible('@errorMessageCss')

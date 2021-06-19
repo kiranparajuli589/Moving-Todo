@@ -37,7 +37,10 @@ module.exports = {
         firefox: {
             extends: 'selenium',
             desiredCapabilities: {
-                browserName: 'firefox'
+                browserName: 'firefox',
+                "moz:firefoxOptions": {
+                    "args": ["--headless"]
+                }
             }
         },
 
