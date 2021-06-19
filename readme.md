@@ -57,4 +57,6 @@ make serve
 yarn test:e2e test/acceptance/features
 # with tags
 yarn test:e2e test/acceptance/features -t '@focus and not @skip'
+# on firefox
+BROWSER=firefox yarn test:e2e test/acceptance/features
 ```
