@@ -37,10 +37,10 @@
 </head>
 <body>
 <!--Navbar-->
-<nav class="todo-nav navbar-dark purple-gradient">
+<nav class="navbar-dark purple-gradient">
     <!-- Navbar brand -->
     <h2 class="navbar-brand" href="#">TODO</h2>
-    <button id="create-todo-btn" class="btn blue-gradient nav-button" type="button"
+    <button id="add-todo" class="blue-gradient" type="button"
             data-toggle="modal" data-target="#create-todo-modal">
         <i class="fas fa-plus" data-toggle="tooltip" title="Create New Todo"></i>
     </button>
@@ -250,12 +250,7 @@
 
 <script src="{% static 'js/main.js' %}" type="text/javascript"></script>
 <script>
-  let elementsNameArray = {
-  {
-    elements_name_array
-  }
-  }
-  ;
+  let elementsNameArray = {{ elements_name_array }};
   $("#search").autocomplete({source: elementsNameArray});
 </script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>

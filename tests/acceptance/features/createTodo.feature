@@ -1,7 +1,7 @@
 Feature: createTodo
   As a user
   I want to create a todo
-  So that I would keep track of my todo
+  So that I would keep track of my daily activities
 
   Background:
     Given user has browsed to the homepage
@@ -22,8 +22,6 @@ Feature: createTodo
     When the user tries to create a blank todo
     Then an error with subject error message "Please enter a subject!" should be visible below subject field
 
-  @skip @issue-clean-db
   Scenario: user should not be able to create a todo with already existing subject
-    Given a todo with subject "subject" is already created
-    When the user tries to create a todo entering already existing subject "subject" and content "new content"
+    When the user tries to create a todo entering already existing subject "Sample Todo" and content "new content"
     Then an error with errormessage "Todo with this Element title already exists." should be visible

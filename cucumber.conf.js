@@ -1,5 +1,6 @@
 const { setDefaultTimeout, After, Before, BeforeAll, AfterAll } = require('cucumber');
 const { createSession, closeSession, startWebDriver, stopWebDriver } = require('nightwatch-api');
+const axios = require('axios').default;
 
 setDefaultTimeout(60000);
 const availableBrowsers = ["chrome", "firefox", "ie"]
@@ -19,6 +20,12 @@ Before(async () => {
 
 After(async () => {
     await closeSession();
+    const res = await axios.delete("http://localhost:8000/clean-todo")
+    if (res.status === 200) {
+        console.log("database: cleared")
+    } else {
+        throw new Error("Failed while db cleanup.")
+    }
 });
 
 AfterAll(async () => {
