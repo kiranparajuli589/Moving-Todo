@@ -1,3 +1,6 @@
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 ## Moving Todo
 A simple todo application where you can manage todo entries.
 Most importantly you can move each todo entry to any position you want.
