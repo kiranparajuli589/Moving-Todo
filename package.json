@@ -19,7 +19,7 @@
   "homepage": "https://github.com/kiranparajuli589/Moving-Todo#readme",
   "dependencies": {
     "@cucumber/cucumber": "^7.3.0",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "chromedriver": "^91.0.0",
     "cucumber": ">=6.0.5",
     "cucumber-pretty": "^6.0.0",
