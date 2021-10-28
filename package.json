@@ -20,7 +20,7 @@
   "dependencies": {
     "@cucumber/cucumber": "^7.3.0",
     "axios": "^0.21.1",
-    "chromedriver": "^91.0.0",
+    "chromedriver": "^94.0.0",
     "cucumber": ">=6.0.5",
     "cucumber-pretty": "^6.0.0",
     "geckodriver": "^2.0.0",
