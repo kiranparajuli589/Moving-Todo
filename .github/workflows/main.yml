@@ -10,8 +10,12 @@ on:
 
 jobs:
   build:
-    name: webUI-tests
+    name: webUI-tests-${{ matrix.browser }}
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        browser: ["chrome", "firefox"]
 
     steps:
       - name: Checkout
@@ -31,4 +35,6 @@ jobs:
           make serve &
 
       - name: E2E Tests
+        env:
+          BROWSER: ${{ matrix.browser }}
         run: yarn test:ci
