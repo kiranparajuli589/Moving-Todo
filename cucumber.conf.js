@@ -17,6 +17,7 @@ setDefaultTimeout(60000);
 const availableBrowsers = ["chrome", "firefox", "ie"];
 
 const browser = process.env.BROWSER || "chrome";
+
 if (!availableBrowsers.includes(browser)) {
   throw new Error(
     "\nInvalid browser selected.\n" +
