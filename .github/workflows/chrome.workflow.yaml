@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: webUI-tests-chrome
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: make install
+
+      - name: Setup Server
+        env:
+          ADMIN_USERNAME: admin
+          ADMIN_PASSWORD: admin
+          ADMIN_EMAIL: test@admin.com
+        run: |
+          make migrate
+          make create-admin
+          make serve &
+
+      - name: E2E Tests
+        env:
+          BROWSER: chrome
+        run: yarn test:ci
