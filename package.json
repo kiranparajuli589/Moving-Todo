@@ -21,6 +21,7 @@
     "@cucumber/cucumber": "^8.0.0-rc.1",
     "axios": "^0.24.0",
     "chromedriver": "^96.0.0",
+    "cucumber": ">=6.0.5",
     "cucumber-pretty": "^6.0.1",
     "geckodriver": "^2.0.4",
     "iedriver": "^3.150.1",
