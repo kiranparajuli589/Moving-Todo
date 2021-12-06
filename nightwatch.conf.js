@@ -18,7 +18,7 @@ module.exports = {
       }
     },
     webdriver: {
-      start_process: false,
+      start_process: true,
     },
     chrome: {
       extends: "selenium",
