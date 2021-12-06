@@ -8,21 +8,18 @@ module.exports = {
       launch_url: "http://localhost:8000",
     },
     selenium: {
-      selenium: {
-        start_process: true,
-        server_path: require("selenium-server").path,
-        cli_args: {
-          "webdriver.gecko.driver": require("geckodriver").path,
-          "webdriver.chrome.driver": require("chromedriver").path,
-          "webdriver.ie.driver":
-            process.platform === "win32" ? require("iedriver").path : "",
-        },
-      },
-      webdriver: {
-        start_process: false,
-      },
+      start_process: true,
+      server_path: require("selenium-server").path,
+      cli_args: {
+        "webdriver.gecko.driver": require("geckodriver").path,
+        "webdriver.chrome.driver": require("chromedriver").path,
+        "webdriver.ie.driver":
+          process.platform === "win32" ? require("iedriver").path : "",
+      }
     },
-
+    webdriver: {
+      start_process: false,
+    },
     chrome: {
       extends: "selenium",
       desiredCapabilities: {
