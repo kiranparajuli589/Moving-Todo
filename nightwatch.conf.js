@@ -8,17 +8,20 @@ module.exports = {
       launch_url: "http://localhost:8000",
     },
     selenium: {
-      start_process: true,
-      server_path: require("selenium-server").path,
-      cli_args: {
-        "webdriver.gecko.driver": require("geckodriver").path,
-        "webdriver.chrome.driver": require("chromedriver").path,
-        "webdriver.ie.driver":
-          process.platform === "win32" ? require("iedriver").path : "",
+       // Selenium Server is running locally and is managed by Nightwatch
+      selenium: {
+        start_process: true,
+        port: 4444,
+        server_path: require('selenium-server').path,
+        cli_args: {
+          'webdriver.gecko.driver': require('geckodriver').path,
+          'webdriver.chrome.driver': require('chromedriver').path,
+          'webdriver.ie.driver': process.platform === 'win32' ? require('iedriver').path : ''
+        }
+      },
+      webdriver: {
+        start_process: false
       }
-    },
-    webdriver: {
-      start_process: true,
     },
     chrome: {
       extends: "selenium",
