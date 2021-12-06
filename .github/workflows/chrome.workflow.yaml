@@ -8,9 +8,6 @@ on:
 
   workflow_dispatch:
 
-stages:
-  - e2e
-
 jobs:
   build:
     name: webUI-tests-chrome
