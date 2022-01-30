@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "E2E tests for the application. Written with Nightwatch and Gherkin.",
   "scripts": {
-    "lint": "yarn prettier --write .",
+    "lint": "pnpm prettier --write .",
     "test:e2e": "cucumber-js --require cucumber.conf.js --require tests/acceptance/stepDefinitions -f @cucumber/pretty-formatter",
     "test:e2e:ci": "cucumber-js --retry 1 --require cucumber.conf.js --require tests/acceptance/stepDefinitions -f @cucumber/pretty-formatter",
-    "test:ci": "yarn test:e2e:ci tests/acceptance/features -t 'not @skip'"
+    "test:ci": "pnpm test:e2e:ci tests/acceptance/features -t 'not @skip'"
   },
   "repository": {
     "type": "git",

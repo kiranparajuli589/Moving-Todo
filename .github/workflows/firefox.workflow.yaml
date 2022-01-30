@@ -10,20 +10,38 @@ on:
 
 jobs:
   build:
-    name: webUI-tests-firefox
-    runs-on: ubuntu-latest
+    name: nightwatch:firefox
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python: ['3.7', '3.8']
+        node: ['14', '16']
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+          cache: "pip"
+      
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+
       - name: Install PNPM
         run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
 
-      - name: Install Dependencies
-        run: make install
+      - name: Install dependencies
+        run: |
+          make pip-i
+          make pnpm-i
 
-      - name: Setup Server
+      - name: Setup server
         env:
           ADMIN_USERNAME: admin
           ADMIN_PASSWORD: admin
@@ -33,7 +51,7 @@ jobs:
           make create-admin
           make serve &
 
-      - name: E2E Tests
+      - name: E2E tests
         env:
           BROWSER: firefox
         run: pnpm test:ci
