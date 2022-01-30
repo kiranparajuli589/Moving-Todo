@@ -4,7 +4,7 @@ const {
   Before,
   BeforeAll,
   AfterAll,
-} = require("cucumber");
+} = require("@cucumber/cucumber");
 const {
   createSession,
   closeSession,
