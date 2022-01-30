@@ -3,13 +3,13 @@ ADMIN_PASSWORD:=admin
 ADMIN_USERNAME:=admin
 ADMIN_EMAIL:=admin@test.com
 
-pip-install:
+pip-i:
 	pip install -r requirements.txt
 
-yarn-install:
-	yarn install
+pnpm-i:
+	pnpm i
 
-install: pip-install yarn-install
+install: pip-i pnpm-i
 
 serve:
 	python manage.py runserver $(ADDRESS)
